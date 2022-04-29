@@ -1,17 +1,20 @@
-%%%
-title = "Extensions to the Access Control Lists (ACLs) YANG Model"
-abbrev = "Enhanced ACLs"
-area = "Internet"
-workgroup = "Netmod WG"
-submissiontype = "IETF"
-keyword = [""]
-#date = 2021-06-01T00:00:00Z
+---
+title: Extensions to the Access Control Lists (ACLs) YANG Model
+abbrev: Enhanced ACLs 
+docname: draft-dbb-netmod-acl-latest
 
-[seriesInfo]
-name = "draft-dbb-netmod-acl"
-value = "draft-dbb-netmod-acl-00"
-stream = "IETF"
-status = "standard"
+
+stand_alone: true
+
+ipr: trust200902
+area: ops
+wg: netmod
+kw: Internet-Draft
+cat: standard
+
+coding: utf-8
+pi: [toc, sortrefs, symrefs]
+
 [[author]]
 initials = "O."
 surname = "Gonzalez de Dios"

@@ -46,7 +46,7 @@ the limitations of the ACL model as initially defined in RFC 8519.
 {{!RFC8519}} defines Acces control lists (ACLs) as a
 user-ordered set of filtering rules. The model targets the
 configuration of the filtering behaviour of a device. However, the
-model structure, as defined in [@!RFC8519], suffers from a set of limitations. This
+model structure, as defined in {{!RFC8519}}, suffers from a set of limitations. This
 document describes these limitations and proposes an enhanced ACL
 structure. 
 
@@ -69,7 +69,7 @@ from the management of the sets. Hence, it is possible to remove/add
 rule.
 
 In addition, the notion of Access Control List (ACL) and defined sets
- is generalized so that it is not device-specific as per [RFC8519].  ACLs
+ is generalized so that it is not device-specific as per {{!RFC8519}}.  ACLs
  and defined sets may be defined at network / administrative domain level
  and associated to devices. This approach facilitates the reusability across multiple
   network elements. For example, managing the IP prefix sets from a network
@@ -81,22 +81,22 @@ e.g., deny-lists or accept-lists that are associated with those provided by a
     
 
 Note that ACLs are used locally in devices but are triggered by other
-tools such as DDoS mitigation [RFC9132] or BGP Flow Spec [RFC8955]
-[RFC8956]. Therefore, supporting means to easily map to the filtering rules conveyed in
+tools such as DDoS mitigation {{!RFC9132}} or BGP Flow Spec {{!RFC8955}}
+{{!RFC8956}}. Therefore, supporting means to easily map to the filtering rules conveyed in
 messages triggered by  hese tools is valuable from a network operation standpoint.
 
 ## Terminology
 
 The keywords **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**,
 **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL**, when they appear in this
-document, are to be interpreted as described in [@!RFC2119].
+document, are to be interpreted as described in {{!RFC2119}}.
 
-The terminology for describing YANG modules is defined in [RFC7950].
+The terminology for describing YANG modules is defined in {{!RFC7950}}.
 The meaning of the symbols in the tree diagrams is defined in
-[RFC8340].
+{{!RFC8340}}.
    
 
-In adition to the terms defined in [@!RFC8519], this document makes use of the following terms: 
+In adition to the terms defined in {{!RFC8519}}, this document makes use of the following terms: 
    
 - Defined set: Refers to reusable description of one or multiple information elements (e.g., IP address, IP prefix, port number, ICMP type). 
 
@@ -115,7 +115,7 @@ IP prefix related data nodes, e.g., "destination-ipv4-network"
 or "destination-ipv6-network", do not allow manipulating a list of IP
 prefixes, which may lead to manipulating large files. The same issue
 is encountered when ACLs have to be in place to mitigate DDoS
-attacks (e.g., [RFC9132]) when a set of sources are involved in such
+attacks (e.g., {{!RFC9132}} when a set of sources are involved in such
 an attack. The situation is even worse when both a list of sources
 and destination prefixes are involved.
 

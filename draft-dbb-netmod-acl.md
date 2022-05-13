@@ -15,52 +15,32 @@ cat: standard
 coding: utf-8
 pi: [toc, sortrefs, symrefs]
 
-[[author]]
-initials = "O."
-surname = "Gonzalez de Dios"
-fullname = "Oscar Gonzalez de Dios"      
-#role = "editor"
-organization = "Telefonica"
-  [author.address]
-  email = "oscar.gonzalezdedios@telefonica.com"
-  [author.address.postal]
-  street = "Distrito T"
-  city = "Madrid"
-  code = "28050"
-[[author]]
-initials = "S."
-surname = "Barguil"
-fullname = "Samier Barguil"
-#role = "editor"
-organization = "Telefonica"
-  [author.address]
-  email = "samier.barguilgiraldo.ext@telefonica.com"
-  [author.address.postal]
-  street = "Distrito T"
-  city = "Madrid"
-  code = "28050"
-  [[author]]
-initials = "M."
-surname = "Boucadair"
-fullname = "Mohamed Boucadair"      
-#role = "editor"
-organization = "Orange"
-  [author.address]
-  email = "mohamed.boucadair@orange.com"
-  [author.address.postal]
-  street = ""
-  city = "Rennes"
-  code = "35000"  
-%%%
+author:
+ -
+    fullname: Oscar Gonzalez de Diose
+    organization: Telefonica
+    email: oscar.gonzalezdedios@telefonica.com
+author:
+ -
+    fullname: Samier Barguil
+    organization: Telefonica
+    email: samier.barguilgiraldo.ext@telefonica.com
 
-.# Abstract
+author:
+ -
+    fullname: Mohamed Boucadair
+    organization: Orange
+    email: mohamed.boucadair@orange.com
+
+
+--- abstract
 
 RFC 8519 defines a YANG data model for Access Control Lists
 (ACLs). This document discusses a set of extensions that fix many of
 the limitations of the ACL model as initially defined in RFC 8519. 
 
 
-{mainmatter}
+--- middle
 
 # Introduction
 [@!RFC8519] defines Acces control lists (ACLs) as a
@@ -884,9 +864,11 @@ This document requests IANA to register the following YANG module in
          prefix: xxxx
          reference: RFC XXXX
 ~~~
+
+
+
+--- back
+
 # Acknowledgements
 
 Many thanks to Jon Shallow and Miguel Cros for the discussion when preparing this draft. 
-
-
-{backmatter}

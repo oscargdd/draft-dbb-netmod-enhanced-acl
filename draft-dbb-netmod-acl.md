@@ -122,8 +122,8 @@ and destination prefixes are involved.
 (#example) shows an example of the required ACL configuration for filtering traffic from two prefixes. 
 
 {#example}
-~~~ ascii-art
 
+~~~~~~~~~~~
 {
   "ietf-access-control-list:acls": {
     "acl": [
@@ -198,8 +198,8 @@ and destination prefixes are involved.
     ]
   }
 }
-~~~
-Figure: Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List.
+~~~~~~~~~~~
+{: #example title=Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List}
 
 Such configuration is suboptimal for both: 
 - Network controllers that need to manipulate large files. All or a subset fo this configuration will need to be passed to the undelrying network devices.

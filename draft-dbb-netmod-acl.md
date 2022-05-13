@@ -43,7 +43,7 @@ the limitations of the ACL model as initially defined in RFC 8519.
 --- middle
 
 # Introduction
-[@!RFC8519] defines Acces control lists (ACLs) as a
+{{!RFC8519}} defines Acces control lists (ACLs) as a
 user-ordered set of filtering rules. The model targets the
 configuration of the filtering behaviour of a device. However, the
 model structure, as defined in [@!RFC8519], suffers from a set of limitations. This

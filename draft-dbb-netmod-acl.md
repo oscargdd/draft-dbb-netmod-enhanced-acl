@@ -6,7 +6,7 @@ docname: draft-dbb-netmod-acl-latest
 
 stand_alone: true
 ipr: trust200902
-area: ops
+area: "Operations and Management"
 wg: netmod
 kw: Internet-Draft
 cat: std

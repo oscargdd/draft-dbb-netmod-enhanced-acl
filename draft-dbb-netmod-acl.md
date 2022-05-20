@@ -10,7 +10,7 @@ ipr: trust200902
 area: ops
 wg: netmod
 kw: Internet-Draft
-cat: standard
+cat: std
 
 coding: utf-8
 pi: [toc, sortrefs, symrefs]

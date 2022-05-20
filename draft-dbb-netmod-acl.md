@@ -20,13 +20,10 @@ author:
     fullname: Oscar Gonzalez de Diose
     organization: Telefonica
     email: oscar.gonzalezdedios@telefonica.com
-author:
  -
     fullname: Samier Barguil
     organization: Telefonica
     email: samier.barguilgiraldo.ext@telefonica.com
-
-author:
  -
     fullname: Mohamed Boucadair
     organization: Orange

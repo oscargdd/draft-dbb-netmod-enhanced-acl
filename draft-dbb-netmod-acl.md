@@ -207,8 +207,8 @@ Such configuration is suboptimal for both:
 
 (#example_1) depicts an example of an optimized strcuture:
 
-{#example_1}
-~~~ ascii-art
+
+~~~~~~~~~~~
 {
   "ietf-access-control-list:acls": {
     "acl": [
@@ -252,7 +252,8 @@ Such configuration is suboptimal for both:
   }
 }
 ~~~
-Figure: Example Illustrating Optimal Use of the ACL Model in a Network Context.
+{: #example_1 title=Example Illustrating Optimal Use of the ACL Model in a Network Context.}
+
 
 ## Manageability: Impossibility to Use Aliases or Defined Sets
 
@@ -301,7 +302,7 @@ The ACL name must, thus, be unique at the scale of the network, but still the sa
 
 ## Partial or Lack of IPv4/IPv6 Fragment Handling
 
-[RFC8519] does not support fragment handling capability for IPv6 but
+{{!RFC8519}} does not support fragment handling capability for IPv6 but
 offers a partial support for IPv4 by means of 'flags'.  Nevertheless,
 the use of 'flags' is problematic since it does not allow a bitmask
 to be defined.  For example, setting other bits not covered by the
@@ -316,55 +317,11 @@ packets.  The following ACEs are defined (in this order):
 * "drop-all-fragments" ACE: discards all fragments.
 * "allow-dns-packets" ACE: accepts DNS packets destined to 198.51.100.0/24.
 
-{#example_2}
-~~~ ascii-art
-   {
-     "ietf-access-control-list:acls": {
-       "acl": [
-         {
-           "name": "dns-fragments",
-           "type": "ipv4-acl-type",
-           "aces": {
-             "ace": [
-               {
-                 "name": "drop-all-fragments",
-                 "matches": {
-                   "ipv4": {
-                     "fragment": {
-                       "operator": "match",
-                       "type": "isf"
-                     }
-                   }
-                 },
-                 "actions": {
-                   "forwarding": "drop"
-                 }
-               },
-               {
-                 "name": "allow-dns-packets",
-                 "matches": {
-                   "ipv4": {
-                     "destination-ipv4-network": "198.51.100.0/24"
-                   },
-                   "udp": {
-                     "destination-port": {
-                       "operator": "eq",
-                       "port": 53
-                     }
-                   },
-                   "actions": {
-                     "forwarding": "accept"
-                   }
-                 }
-               }
-             ]
-           }
-         }
-       ]
-     }
-   }
-~~~
-Figure: Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets.
+
+~~~~~~~~~~~
+TBD
+~~~~~~~~~~~
+{: #example_2 title=Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets.} 
 
 (#example_3) shows an example of the body of a candidate POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):
 
@@ -372,99 +329,32 @@ Figure: Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets.
 * "allow-dns-packets" ACE: accepts DNS packets destined to 2001:db8::/32.
 
 {#example_3}
-~~~ ascii-art
-  {
-     "ietf-access-control-list:acls": {
-       "acl": [
-         {
-           "name": "dns-fragments",
-           "type": "ipv6-acl-type",
-           "aces": {
-             "ace": [
-               {
-                 "name": "drop-all-fragments",
-                 "matches": {
-                   "ipv6": {
-                     "fragment": {
-                       "operator": "match",
-                       "type": "isf"
-                     }
-                   }
-                 },
-                 "actions": {
-                   "forwarding": "drop"
-                 }
-               },
-               {
-                 "name": "allow-dns-packets",
-                 "matches": {
-                   "ipv6": {
-                     "destination-ipv6-network": "2001:db8::/32"
-                   },
-                   "udp": {
-                     "destination-port": {
-                       "operator": "eq",
-                       "port": 53
-                     }
-                   }
-                 },
-                 "actions": {
-                   "forwarding": "accept"
-                 }
-               }
-             ]
-           }
-         }
-       ]
-     }
-   }
-~~~
+~~~~~~~~~~~
+TBD2
+~~~~~~~~~~~
 Figure: Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets.
 
 ## Suboptimal TCP Flags Handling
 
-[RFC8519] allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules. Some examples to illustrate the use of such field are discussed below.
+{{!RFC8519}} allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules. Some examples to illustrate the use of such field are discussed below.
    
 (#example_4) shows an example of a candidate request to install a filter to discard incoming TCP messages having all flags unset.
    
 {#example_4}
-~~~ ascii-art
-  {
-     "ietf-access-control-list:acls": {
-       "acl": [{
-         "name": "tcp-flags-example",
-         "aces": {
-           "ace": [{
-             "name": "null-attack",
-             "matches": {
-               "tcp": {
-                 "flags-bitmask": {
-                   "operator": "not any",
-                   "bitmask": 4095
-                 }
-               }
-             },
-             "actions": {
-               "forwarding": "drop"
-             }
-           }]
-         }
-       }]
-     }
-   }
-~~~
+~~~~~~~~~~~
+ TBD 3
+~~~~~~~~~~~
 Figure: Example to Deny TCP Null Attack Messages   
    
 ## Rate-Limit Action 
 
- [RFC8519] specifies that forwarding actions can be 'accept' (i.e., accept matching
+ {{!RFC8519}} specifies that forwarding actions can be 'accept' (i.e., accept matching
    traffic), 'drop' (i.e., drop matching traffic without sending any
    ICMP error message), or 'reejct' (i.e., drop matching traffic and send an ICMP error message to the source). Howover, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by the ACL model. 
    
 (#example_5) shows a candidate ACL example to rate-limit incoming SYNs during a SYN flood attack.
    
-{#example_5}
-~~~ ascii-art
+~~~~~~~~~~~
   {
      "ietf-access-control-list:acls": {
        "acl": [{
@@ -489,12 +379,12 @@ Figure: Example to Deny TCP Null Attack Messages
        }]
      }
    }
-~~~
-Figure: Example Rate-Limit Incoming TCP SYNs
+~~~~~~~~~~~
+{:#example_5 title=Example Rate-Limit Incoming TCP SYNs}
 
 ## Payload-based Filtering
 
-Some transport protocols use existing protocols (e.g., TCP or UDP) as substrate. The match criteria for such protocols may rely upon the 'protocol' under 'l3', TCP/UDP match criteria, part of the TCP/UDP payload, or a combination thereof. [RFC8519] does not support matching based on the payload.
+Some transport protocols use existing protocols (e.g., TCP or UDP) as substrate. The match criteria for such protocols may rely upon the 'protocol' under 'l3', TCP/UDP match criteria, part of the TCP/UDP payload, or a combination thereof. {{!RFC8519}} does not support matching based on the payload.
 
 Likewise, the current version of the ACL model does not support filetering of encapsulated traffic.
 
@@ -522,7 +412,7 @@ requirements, e.g.:
 ## Enhanced ACL
 
 {#enh-acl-tree}
-~~~ ascii-art
+~~~~~~~~~~~
 module: ietf-acl-enh
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches:
@@ -551,7 +441,7 @@ module: ietf-acl-enh
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:actions:
     +--rw rate-limit?   decimal64
-~~~
+~~~~~~~~~~~
 
 ## TBA
 
@@ -560,7 +450,7 @@ module: ietf-acl-enh
 ## Enhanced ACL
 
 {#enh-acl}
-~~~ ascii-art
+~~~~~~~~~~~
 module ietf-acl-enh {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-acl-enh";
@@ -817,19 +707,19 @@ module ietf-acl-enh {
     }
   }
 }
-~~~ 
+~~~~~~~~~~~
 
 # Security Considerations (TBC)
  
 The YANG modules specified in this document define a schema for data
    that is designed to be accessed via network management protocol such
-   as NETCONF [@!RFC6241] or RESTCONF [@!RFC8040].  The lowest NETCONF layer
+   as NETCONF {{!RFC6241}} or RESTCONF {{!RFC8040}}.  The lowest NETCONF layer
    is the secure transport layer, and the mandatory-to-implement secure
-   transport is Secure Shell (SSH) [@!RFC6242].  The lowest RESTCONF layer
+   transport is Secure Shell (SSH) {{!RFC6242}}.  The lowest RESTCONF layer
    is HTTPS, and the mandatory-to-implement secure transport is TLS
-   [@!RFC8446].
+   {{!RFC8446}}.
    
-The Network Configuration Access Control Model (NACM) [@!RFC8341] provides the means to restrict access for particular NETCONF or RESTCONF users to a preconfigured subset of all available NETCONF or RESTCONF protocol operations and content. 
+The Network Configuration Access Control Model (NACM) {{!RFC8341}} provides the means to restrict access for particular NETCONF or RESTCONF users to a preconfigured subset of all available NETCONF or RESTCONF protocol operations and content. 
 
 There are a number of data nodes defined in this YANG module that are writable/creatable/deletable (i.e., config true, which is the default). These data nodes may be considered sensitive or vulnerable in some network environments. Write operations (e.g., edit-config) to these data nodes without proper protection can have a negative effect on network operations. These are the subtrees and data nodes and their sensitivity/vulnerability: 
 
@@ -845,7 +735,7 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 ## URI Registration (TBC)
 
    This document requests IANA to register the following URI in the "ns"
-   subregistry within the "IETF XML Registry" [@!RFC3688]:
+   subregistry within the "IETF XML Registry" {{!RFC3688}}:
 ~~~
          URI: urn:ietf:params:xml:ns:yang:xxx
          Registrant Contact: The IESG.
@@ -855,7 +745,7 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 ## YANG Module Name Registration (TBC)
 
 This document requests IANA to register the following YANG module in
-   the "YANG Module Names" subregistry [@!RFC6020] within the "YANG
+   the "YANG Module Names" subregistry {{!RFC6020}} within the "YANG
    Parameters" registry.
 ~~~
          name: xxxx

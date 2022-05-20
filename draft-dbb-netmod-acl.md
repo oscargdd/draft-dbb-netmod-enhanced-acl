@@ -17,7 +17,7 @@ pi: [toc, sortrefs, symrefs]
 
 author:
  -
-    fullname: Oscar Gonzalez de Diose
+    fullname: Oscar Gonzalez de Dios
     organization: Telefonica
     email: oscar.gonzalezdedios@telefonica.com
  -
@@ -116,7 +116,7 @@ attacks (e.g., {{!RFC9132}} when a set of sources are involved in such
 an attack. The situation is even worse when both a list of sources
 and destination prefixes are involved.
 
-(#example) shows an example of the required ACL configuration for filtering traffic from two prefixes.
+{{example}} shows an example of the required ACL configuration for filtering traffic from two prefixes.
 
 ~~~~~~~~~~~
 {
@@ -200,7 +200,7 @@ Such configuration is suboptimal for both:
 - Network controllers that need to manipulate large files. All or a subset fo this configuration will need to be passed to the undelrying network devices.
 - Devices may receive such confirguration and thus will need to maintain it locally.
 
-(#example_1) depicts an example of an optimized strcuture:
+({{example_1}} depicts an example of an optimized strcuture:
 
 ~~~~~~~~~~~
 {
@@ -260,7 +260,7 @@ The defined sets are reusable definitions across several ACLs. Each category is 
 -  Port number sets: Used to create lists of TCP or UDP port values (or any other transport protocol that makes uses of port numbers). The identity of the protcols is identified by the protocol set, if present. Otherwise, a set apply to any protocol.
 -  ICMP sets: Uses to create lists of ICMP-based filters. This applies only when the protocol is set to ICMP or ICMPv6.
 
-A candidate structure is shown in (#example_sets):
+A candidate structure is shown in {{example_sets}}:
 
 
 ~~~ ascii-art
@@ -305,7 +305,7 @@ through (because it won't match the ACE).
 
 Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to efficiently handle fragment-related filtering rules. Some examples to illustrate how 'fragment' can be used are provided below.
 
-(#example_2) shows the content of a candidate POST request to allow the traffic destined to 198.51.100.0/24 and UDP port number 53, but to drop all fragmented
+{{example_2}} shows the content of a candidate POST request to allow the traffic destined to 198.51.100.0/24 and UDP port number 53, but to drop all fragmented
 packets.  The following ACEs are defined (in this order):
 
 * "drop-all-fragments" ACE: discards all fragments.
@@ -361,7 +361,7 @@ packets.  The following ACEs are defined (in this order):
 ~~~
 {: #example_2 title="Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets."}
 
-(#example_3) shows an example of the body of a candidate POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):
+{{example_3}} shows an example of the body of a candidate POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):
 
 * "drop-all-fragments" ACE: discards all fragments (including atomic fragments). That is, IPv6 packets that include a Fragment header (44) are dropped.
 * "allow-dns-packets" ACE: accepts DNS packets destined to 2001:db8::/32.
@@ -420,7 +420,7 @@ packets.  The following ACEs are defined (in this order):
 
 {{!RFC8519}} allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules. Some examples to illustrate the use of such field are discussed below.
 
-(#example_4) shows an example of a candidate request to install a filter to discard incoming TCP messages having all flags unset.
+{{example_4}} shows an example of a candidate request to install a filter to discard incoming TCP messages having all flags unset.
 
 
 ~~~ ascii-art

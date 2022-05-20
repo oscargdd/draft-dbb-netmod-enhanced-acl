@@ -73,7 +73,7 @@ In addition, the notion of Access Control List (ACL) and defined sets
  and defined sets may be defined at network / administrative domain level
  and associated to devices. This approach facilitates the reusability across multiple
   network elements. For example, managing the IP prefix sets from a network
-   level makes it easier to maintain by the security groups.   
+   level makes it easier to maintain by the security groups.
 
 Network operators maintain sets of IP prefixes that are related to each other,
 e.g., deny-lists or accept-lists that are associated with those provided by a
@@ -307,7 +307,7 @@ offers a partial support for IPv4 by means of 'flags'.  Nevertheless,
 the use of 'flags' is problematic since it does not allow a bitmask
 to be defined.  For example, setting other bits not covered by the
 'flags' filtering clause in a packet will allow that packet to get
-through (because it won't match the ACE).  
+through (because it won't match the ACE).
    
 Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to efficiently handle fragment-related filtering rules. Some examples to illustrate how 'fragment' can be used are provided below.
    
@@ -344,7 +344,7 @@ Figure: Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets.
 ~~~~~~~~~~~
  TBD 3
 ~~~~~~~~~~~
-Figure: Example to Deny TCP Null Attack Messages   
+Figure: Example to Deny TCP Null Attack Messages
    
 ## Rate-Limit Action 
 

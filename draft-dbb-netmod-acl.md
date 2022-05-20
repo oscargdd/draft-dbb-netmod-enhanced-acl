@@ -5,12 +5,12 @@ docname: draft-dbb-netmod-acl-latest
 
 
 stand_alone: true
-
 ipr: trust200902
 area: ops
 wg: netmod
 kw: Internet-Draft
 cat: std
+submissiontype: IETF
 
 coding: utf-8
 pi: [toc, sortrefs, symrefs]
@@ -121,8 +121,6 @@ and destination prefixes are involved.
 
 (#example) shows an example of the required ACL configuration for filtering traffic from two prefixes. 
 
-{#example}
-
 ~~~~~~~~~~~
 {
   "ietf-access-control-list:acls": {
@@ -199,14 +197,13 @@ and destination prefixes are involved.
   }
 }
 ~~~~~~~~~~~
-{: #example title=Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List}
+{: #example title="Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List"}
 
 Such configuration is suboptimal for both: 
 - Network controllers that need to manipulate large files. All or a subset fo this configuration will need to be passed to the undelrying network devices.
 - Devices may receive such confirguration and thus will need to maintain it locally. 
 
 (#example_1) depicts an example of an optimized strcuture:
-
 
 ~~~~~~~~~~~
 {
@@ -251,8 +248,8 @@ Such configuration is suboptimal for both:
     ]
   }
 }
-~~~
-{: #example_1 title=Example Illustrating Optimal Use of the ACL Model in a Network Context.}
+~~~~~~~~~~~
+{: #example_1 title="Example Illustrating Optimal Use of the ACL Model in a Network Context."}
 
 
 ## Manageability: Impossibility to Use Aliases or Defined Sets
@@ -266,9 +263,9 @@ The defined sets are reusable definitions across several ACLs. Each category is 
 -  Port number sets: Used to create lists of TCP or UDP port values (or any other transport protocol that makes uses of port numbers). The identity of the protcols is identified by the protocol set, if present. Otherwise, a set apply to any protocol. 
 -  ICMP sets: Uses to create lists of ICMP-based filters. This applies only when the protocol is set to ICMP or ICMPv6.
 
-A candidate structure is shown in #example_sets:
+A candidate structure is shown in (#example_sets):
 
-{#example_sets}
+
 ~~~ ascii-art
      +--rw defined-sets
      |  +--rw prefix-sets
@@ -292,7 +289,7 @@ A candidate structure is shown in #example_sets:
      |           +--rw code?             uint8
      |           +--rw rest-of-header?   binary
 ~~~
-Figure: Examples of Defined Sets.
+{: #example_sets title="Examples of Defined Sets."}
 
 ## Bind ACLs to Devices, Not Only Interfaces
 
@@ -318,21 +315,109 @@ packets.  The following ACEs are defined (in this order):
 * "allow-dns-packets" ACE: accepts DNS packets destined to 198.51.100.0/24.
 
 
-~~~~~~~~~~~
-TBD
-~~~~~~~~~~~
-{: #example_2 title=Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets.} 
+~~~ ascii-art
+{
+     "ietf-access-control-list:acls": {
+       "acl": [
+         {
+           "name": "dns-fragments",
+           "type": "ipv4-acl-type",
+           "aces": {
+             "ace": [
+               {
+                 "name": "drop-all-fragments",
+                 "matches": {
+                   "ipv4": {
+                     "fragment": {
+                       "operator": "match",
+                       "type": "isf"
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "drop"
+                 }
+               },
+               {
+                 "name": "allow-dns-packets",
+                 "matches": {
+                   "ipv4": {
+                     "destination-ipv4-network": "198.51.100.0/24"
+                   },
+                   "udp": {
+                     "destination-port": {
+                       "operator": "eq",
+                       "port": 53
+                     }
+                   },
+                   "actions": {
+                     "forwarding": "accept"
+                   }
+                 }
+               }
+             ]
+           }
+         }
+       ]
+     }
+   }
+~~~
+{: #example_2 title="Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets."} 
 
 (#example_3) shows an example of the body of a candidate POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):
 
 * "drop-all-fragments" ACE: discards all fragments (including atomic fragments). That is, IPv6 packets that include a Fragment header (44) are dropped.
 * "allow-dns-packets" ACE: accepts DNS packets destined to 2001:db8::/32.
 
-{#example_3}
-~~~~~~~~~~~
-TBD2
-~~~~~~~~~~~
-Figure: Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets.
+
+~~~ ascii-art
+    {
+     "ietf-access-control-list:acls": {
+       "acl": [
+         {
+           "name": "dns-fragments",
+           "type": "ipv6-acl-type",
+           "aces": {
+             "ace": [
+               {
+                 "name": "drop-all-fragments",
+                 "matches": {
+                   "ipv6": {
+                     "fragment": {
+                       "operator": "match",
+                       "type": "isf"
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "drop"
+                 }
+               },
+               {
+                 "name": "allow-dns-packets",
+                 "matches": {
+                   "ipv6": {
+                     "destination-ipv6-network": "2001:db8::/32"
+                   },
+                   "udp": {
+                     "destination-port": {
+                       "operator": "eq",
+                       "port": 53
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "accept"
+                 }
+               }
+             ]
+           }
+         }
+       ]
+     }
+   }
+~~~
+{: #example_3 title="Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets."}
 
 ## Suboptimal TCP Flags Handling
 
@@ -340,11 +425,33 @@ Figure: Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets.
    
 (#example_4) shows an example of a candidate request to install a filter to discard incoming TCP messages having all flags unset.
    
-{#example_4}
-~~~~~~~~~~~
- TBD 3
-~~~~~~~~~~~
-Figure: Example to Deny TCP Null Attack Messages
+
+~~~ ascii-art
+  {
+     "ietf-access-control-list:acls": {
+       "acl": [{
+         "name": "tcp-flags-example",
+         "aces": {
+           "ace": [{
+             "name": "null-attack",
+             "matches": {
+               "tcp": {
+                 "flags-bitmask": {
+                   "operator": "not any",
+                   "bitmask": 4095
+                 }
+               }
+             },
+             "actions": {
+               "forwarding": "drop"
+             }
+           }]
+         }
+       }]
+     }
+   }
+~~~
+{: #example_4 title="Example to Deny TCP Null Attack Messages"}
    
 ## Rate-Limit Action 
 
@@ -354,7 +461,7 @@ Figure: Example to Deny TCP Null Attack Messages
    
 (#example_5) shows a candidate ACL example to rate-limit incoming SYNs during a SYN flood attack.
    
-~~~~~~~~~~~
+~~~ ascii-art
   {
      "ietf-access-control-list:acls": {
        "acl": [{
@@ -379,8 +486,8 @@ Figure: Example to Deny TCP Null Attack Messages
        }]
      }
    }
-~~~~~~~~~~~
-{:#example_5 title=Example Rate-Limit Incoming TCP SYNs}
+~~~
+{: #example_5 title="Example Rate-Limit Incoming TCP SYNs"}
 
 ## Payload-based Filtering
 
@@ -399,7 +506,7 @@ This network/device ACLs differentiation introduces several new
 requirements, e.g.:
 
 * An ACL name can be used at both network and device levels. 
-* An ACL content updated at the network level should imply 
+* An ACL content updated at the network level should imply
   a transaction that updates the relevant content in all the nodes using this
   ACL.
 * ACLs defined at the device level have a local meaning for the specific node. 
@@ -411,8 +518,8 @@ requirements, e.g.:
 
 ## Enhanced ACL
 
-{#enh-acl-tree}
-~~~~~~~~~~~
+
+~~~ ascii-art
 module: ietf-acl-enh
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches:
@@ -441,7 +548,8 @@ module: ietf-acl-enh
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:actions:
     +--rw rate-limit?   decimal64
-~~~~~~~~~~~
+~~~
+{: #enh-acl-tree title="Enhanced ACL tree"}
 
 ## TBA
 
@@ -449,8 +557,8 @@ module: ietf-acl-enh
 
 ## Enhanced ACL
 
-{#enh-acl}
-~~~~~~~~~~~
+
+~~~ ascii-art
 module ietf-acl-enh {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-acl-enh";
@@ -656,7 +764,7 @@ module ietf-acl-enh {
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
-        + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4" {
+       + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4" {
     description
       "Handle non-initial and initial fragments for IPv4 packets.";
     container fragment {
@@ -667,7 +775,7 @@ module ietf-acl-enh {
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
-        + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
+       + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
     description
       "Handle non-initial and initial fragments for IPv6 packets.";
     container fragment {
@@ -707,7 +815,8 @@ module ietf-acl-enh {
     }
   }
 }
-~~~~~~~~~~~
+~~~
+{: #enh-acl-module}
 
 # Security Considerations (TBC)
  

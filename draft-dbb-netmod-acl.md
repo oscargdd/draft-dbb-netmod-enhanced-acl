@@ -1,6 +1,6 @@
 ---
 title: Extensions to the Access Control Lists (ACLs) YANG Model
-abbrev: Enhanced ACLs 
+abbrev: Enhanced ACLs
 docname: draft-dbb-netmod-acl-latest
 
 
@@ -37,7 +37,7 @@ author:
 
 RFC 8519 defines a YANG data model for Access Control Lists
 (ACLs). This document discusses a set of extensions that fix many of
-the limitations of the ACL model as initially defined in RFC 8519. 
+the limitations of the ACL model as initially defined in RFC 8519.
 
 
 --- middle
@@ -48,9 +48,9 @@ user-ordered set of filtering rules. The model targets the
 configuration of the filtering behaviour of a device. However, the
 model structure, as defined in {{!RFC8519}}, suffers from a set of limitations. This
 document describes these limitations and proposes an enhanced ACL
-structure. 
+structure.
 
-The motivation of such enhanced ACL structure is discussed in detail in (#ps). 
+The motivation of such enhanced ACL structure is discussed in detail in (#ps).
 
 When managing ACLs, it is common for network operators to group
 matching elements in pre-defined sets. The consolidation into matches
@@ -60,7 +60,7 @@ IP addresses (or prefixes), a single rule will suffice rather than creating
 individual Access Control Entries (ACEs) for each IP address (or prefix). In
 doing so, implementations would optimize the performance of matching
 lists vs multiple rules matching.
-  
+
 The enhanced ACL structure is also meant to facilitate the management of
 network operators. Instead of entering the IP address or port number
 literals, using user-named lists decouples the creation of the rule
@@ -78,7 +78,7 @@ In addition, the notion of Access Control List (ACL) and defined sets
 Network operators maintain sets of IP prefixes that are related to each other,
 e.g., deny-lists or accept-lists that are associated with those provided by a
  VPN customer. These lists are maintained and manipulated by security expert teams.
-    
+
 
 Note that ACLs are used locally in devices but are triggered by other
 tools such as DDoS mitigation {{!RFC9132}} or BGP Flow Spec {{!RFC8955}}
@@ -94,15 +94,15 @@ document, are to be interpreted as described in {{!RFC2119}}.
 The terminology for describing YANG modules is defined in {{!RFC7950}}.
 The meaning of the symbols in the tree diagrams is defined in
 {{!RFC8340}}.
-   
 
-In adition to the terms defined in {{!RFC8519}}, this document makes use of the following terms: 
-   
-- Defined set: Refers to reusable description of one or multiple information elements (e.g., IP address, IP prefix, port number, ICMP type). 
+
+In adition to the terms defined in {{!RFC8519}}, this document makes use of the following terms:
+
+- Defined set: Refers to reusable description of one or multiple information elements (e.g., IP address, IP prefix, port number, ICMP type).
 
 # Approach
 
-This first version of the document does not include on purpose any YANG module. This is because the authors are seeking a work direction from the netmod WG whether the missing features can be accomplished by means of augmentations or whether an ACL-bis document is more appropriate. 
+This first version of the document does not include on purpose any YANG module. This is because the authors are seeking a work direction from the netmod WG whether the missing features can be accomplished by means of augmentations or whether an ACL-bis document is more appropriate.
 
 Future versions of the document will include a YANG module that will reflect the WG feedback. A network wide module, in adition to the device module, might be required. The decision on whether a single module is sufficient to handle both device and network levels or two separate ones will be based on WG feedback.
 
@@ -119,7 +119,7 @@ attacks (e.g., {{!RFC9132}} when a set of sources are involved in such
 an attack. The situation is even worse when both a list of sources
 and destination prefixes are involved.
 
-(#example) shows an example of the required ACL configuration for filtering traffic from two prefixes. 
+(#example) shows an example of the required ACL configuration for filtering traffic from two prefixes.
 
 ~~~~~~~~~~~
 {
@@ -134,9 +134,9 @@ and destination prefixes are involved.
               "name": "my-test-ace",
               "matches": {
                 "ipv6": {
-                  "destination-ipv6-network": 
+                  "destination-ipv6-network":
                     "2001:db8:6401:1::/64",
-                  "source-ipv6-network": 
+                  "source-ipv6-network":
                     "2001:db8:1234::/96",
                   "protocol": 17,
                   "flow-label": 10000
@@ -168,9 +168,9 @@ and destination prefixes are involved.
               "name": "my-test-ace",
               "matches": {
                 "ipv6": {
-                  "destination-ipv6-network": 
+                  "destination-ipv6-network":
                     "2001:db8:6401:c::/64",
-                  "source-ipv6-network": 
+                  "source-ipv6-network":
                     "2001:db8:1234::/96",
                   "protocol": 17,
                   "flow-label": 10000
@@ -199,9 +199,9 @@ and destination prefixes are involved.
 ~~~~~~~~~~~
 {: #example title="Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List"}
 
-Such configuration is suboptimal for both: 
+Such configuration is suboptimal for both:
 - Network controllers that need to manipulate large files. All or a subset fo this configuration will need to be passed to the undelrying network devices.
-- Devices may receive such confirguration and thus will need to maintain it locally. 
+- Devices may receive such confirguration and thus will need to maintain it locally.
 
 (#example_1) depicts an example of an optimized strcuture:
 
@@ -222,7 +222,7 @@ Such configuration is suboptimal for both:
                     "2001:db8:6401:1::/64",
                     "2001:db8:6401:c::/64"
                   ],
-                  "source-ipv6-network": 
+                  "source-ipv6-network":
                     "2001:db8:1234::/96",
                   "protocol": 17,
                   "flow-label": 10000
@@ -254,13 +254,13 @@ Such configuration is suboptimal for both:
 
 ## Manageability: Impossibility to Use Aliases or Defined Sets
 
-The same approach as the one discussed for IP prefixes can be generalized by introduing the concept of "aliases" or "defined sets". 
+The same approach as the one discussed for IP prefixes can be generalized by introduing the concept of "aliases" or "defined sets".
 
 The defined sets are reusable definitions across several ACLs. Each category is modelled in YANG as a list of parameters related to the class it represents. The following sets can be considered:
 
--  Prefix sets: Used to create lists of IPv4 or IPv6 prefixes. 
--  Protocol sets: Used to create a list of protocols. 
--  Port number sets: Used to create lists of TCP or UDP port values (or any other transport protocol that makes uses of port numbers). The identity of the protcols is identified by the protocol set, if present. Otherwise, a set apply to any protocol. 
+-  Prefix sets: Used to create lists of IPv4 or IPv6 prefixes.
+-  Protocol sets: Used to create a list of protocols.
+-  Port number sets: Used to create lists of TCP or UDP port values (or any other transport protocol that makes uses of port numbers). The identity of the protcols is identified by the protocol set, if present. Otherwise, a set apply to any protocol.
 -  ICMP sets: Uses to create lists of ICMP-based filters. This applies only when the protocol is set to ICMP or ICMPv6.
 
 A candidate structure is shown in (#example_sets):
@@ -293,9 +293,9 @@ A candidate structure is shown in (#example_sets):
 
 ## Bind ACLs to Devices, Not Only Interfaces
 
-In the context of network management, an ACL may be enforced in many network locations. As such, the ACL module should allow binding an ACL to multiple devices, not only (abstract) interfaces. 
+In the context of network management, an ACL may be enforced in many network locations. As such, the ACL module should allow binding an ACL to multiple devices, not only (abstract) interfaces.
 
-The ACL name must, thus, be unique at the scale of the network, but still the same name may be used in many devices when enforcing node-specific ACLs. 
+The ACL name must, thus, be unique at the scale of the network, but still the same name may be used in many devices when enforcing node-specific ACLs.
 
 ## Partial or Lack of IPv4/IPv6 Fragment Handling
 
@@ -305,9 +305,9 @@ the use of 'flags' is problematic since it does not allow a bitmask
 to be defined.  For example, setting other bits not covered by the
 'flags' filtering clause in a packet will allow that packet to get
 through (because it won't match the ACE).
-   
+
 Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to efficiently handle fragment-related filtering rules. Some examples to illustrate how 'fragment' can be used are provided below.
-   
+
 (#example_2) shows the content of a candidate POST request to allow the traffic destined to 198.51.100.0/24 and UDP port number 53, but to drop all fragmented
 packets.  The following ACEs are defined (in this order):
 
@@ -362,7 +362,7 @@ packets.  The following ACEs are defined (in this order):
      }
    }
 ~~~
-{: #example_2 title="Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets."} 
+{: #example_2 title="Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets."}
 
 (#example_3) shows an example of the body of a candidate POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):
 
@@ -422,9 +422,9 @@ packets.  The following ACEs are defined (in this order):
 ## Suboptimal TCP Flags Handling
 
 {{!RFC8519}} allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules. Some examples to illustrate the use of such field are discussed below.
-   
+
 (#example_4) shows an example of a candidate request to install a filter to discard incoming TCP messages having all flags unset.
-   
+
 
 ~~~ ascii-art
   {
@@ -452,15 +452,15 @@ packets.  The following ACEs are defined (in this order):
    }
 ~~~
 {: #example_4 title="Example to Deny TCP Null Attack Messages"}
-   
-## Rate-Limit Action 
+
+## Rate-Limit Action
 
  {{!RFC8519}} specifies that forwarding actions can be 'accept' (i.e., accept matching
    traffic), 'drop' (i.e., drop matching traffic without sending any
-   ICMP error message), or 'reejct' (i.e., drop matching traffic and send an ICMP error message to the source). Howover, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by the ACL model. 
-   
+   ICMP error message), or 'reejct' (i.e., drop matching traffic and send an ICMP error message to the source). Howover, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by the ACL model.
+
 (#example_5) shows a candidate ACL example to rate-limit incoming SYNs during a SYN flood attack.
-   
+
 ~~~ ascii-art
   {
      "ietf-access-control-list:acls": {
@@ -495,26 +495,26 @@ Some transport protocols use existing protocols (e.g., TCP or UDP) as substrate.
 
 Likewise, the current version of the ACL model does not support filetering of encapsulated traffic.
 
-## Reuse the ACLs Content Across Several Devices 
+## Reuse the ACLs Content Across Several Devices
 
 Having a global network view of the ACLs is highly valuable for service providers. An ACL could be defined and applied
 following the hierarchy of the network topology. So, an ACL can be
 defined at the network level and, then, that same ACL can be used (or referenced to)
-in several devices (including termination points) within the same network. 
+in several devices (including termination points) within the same network.
 
 This network/device ACLs differentiation introduces several new
 requirements, e.g.:
 
-* An ACL name can be used at both network and device levels. 
+* An ACL name can be used at both network and device levels.
 * An ACL content updated at the network level should imply
   a transaction that updates the relevant content in all the nodes using this
   ACL.
-* ACLs defined at the device level have a local meaning for the specific node. 
+* ACLs defined at the device level have a local meaning for the specific node.
 * A device can be associated with a router, a VRF, a
   logical system, or a virtual node. ACLs can be applied in physical and
-  logical infrastructure. 
+  logical infrastructure.
 
-# Overall Module Structure  
+# Overall Module Structure
 
 ## Enhanced ACL
 
@@ -819,7 +819,7 @@ module ietf-acl-enh {
 {: #enh-acl-module}
 
 # Security Considerations (TBC)
- 
+
 The YANG modules specified in this document define a schema for data
    that is designed to be accessed via network management protocol such
    as NETCONF {{!RFC6241}} or RESTCONF {{!RFC8040}}.  The lowest NETCONF layer
@@ -827,14 +827,14 @@ The YANG modules specified in this document define a schema for data
    transport is Secure Shell (SSH) {{!RFC6242}}.  The lowest RESTCONF layer
    is HTTPS, and the mandatory-to-implement secure transport is TLS
    {{!RFC8446}}.
-   
-The Network Configuration Access Control Model (NACM) {{!RFC8341}} provides the means to restrict access for particular NETCONF or RESTCONF users to a preconfigured subset of all available NETCONF or RESTCONF protocol operations and content. 
 
-There are a number of data nodes defined in this YANG module that are writable/creatable/deletable (i.e., config true, which is the default). These data nodes may be considered sensitive or vulnerable in some network environments. Write operations (e.g., edit-config) to these data nodes without proper protection can have a negative effect on network operations. These are the subtrees and data nodes and their sensitivity/vulnerability: 
+The Network Configuration Access Control Model (NACM) {{!RFC8341}} provides the means to restrict access for particular NETCONF or RESTCONF users to a preconfigured subset of all available NETCONF or RESTCONF protocol operations and content.
+
+There are a number of data nodes defined in this YANG module that are writable/creatable/deletable (i.e., config true, which is the default). These data nodes may be considered sensitive or vulnerable in some network environments. Write operations (e.g., edit-config) to these data nodes without proper protection can have a negative effect on network operations. These are the subtrees and data nodes and their sensitivity/vulnerability:
 
 - TBC
 
-Some of the readable data nodes in this YANG module may be considered sensitive or vulnerable in some network environments. It is thus important to control read access (e.g., via get, get-config, or notification) to these data nodes. These are the subtrees and data nodes and their sensitivity/vulnerability: 
+Some of the readable data nodes in this YANG module may be considered sensitive or vulnerable in some network environments. It is thus important to control read access (e.g., via get, get-config, or notification) to these data nodes. These are the subtrees and data nodes and their sensitivity/vulnerability:
 
 - TBC
 
@@ -870,4 +870,4 @@ This document requests IANA to register the following YANG module in
 
 # Acknowledgements
 
-Many thanks to Jon Shallow and Miguel Cros for the discussion when preparing this draft. 
+Many thanks to Jon Shallow and Miguel Cros for the discussion when preparing this draft.

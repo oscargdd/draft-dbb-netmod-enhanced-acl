@@ -1,0 +1,2275 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Extensions to the Access Control Lists (ACLs) YANG Model</title>
+<meta content="Oscar Gonzalez de Dios" name="author">
+<meta content="Samier Barguil" name="author">
+<meta content="Mohamed Boucadair" name="author">
+<meta content="
+       RFC 8519 defines a YANG data model for Access Control Lists
+(ACLs). This document discusses a set of extensions that fix many of
+the limitations of the ACL model as initially defined in RFC 8519. 
+    " name="description">
+<meta content="xml2rfc 3.12.7" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-dbb-netmod-acl-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.12.7
+    Python 3.9.7
+    appdirs 1.4.4
+    ConfigArgParse 1.3
+    google-i18n-address 2.5.1
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.6.5
+    MarkupSafe 2.0.1
+    pycountry 20.7.3
+    pyflakes 2.3.1
+    PyYAML 5.4.1
+    requests 2.26.0
+    setuptools 52.0.0
+    six 1.16.0
+-->
+<link href="draft-dbb-netmod-acl.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+dd.break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  pre + .pilcrow, svg + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+tr:nth-child(2n) > td {
+  background-color: var(--background-color);
+}
+tr:nth-child(2n+1) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n+1) > td {
+  background-color: var(--background-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 8em;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  margin: 0;
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0 0 0 calc(1em + var(--identifier-width));
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul p, #toc ul li {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left, table .text-left {
+  text-align: left;
+}
+table .text-center, table .text-center {
+  text-align: center;
+}
+table .text-right, table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
+</style>
+
+</head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Enhanced ACLs</td>
+<td class="right">May 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Dios, et al.</td>
+<td class="center">Expires 21 November 2022</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">netmod</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-dbb-netmod-acl-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-05-20" class="published">20 May 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2022-11-21">21 November 2022</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">O. G. D. Dios</div>
+<div class="org">Telefonica</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Barguil</div>
+<div class="org">Telefonica</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Boucadair</div>
+<div class="org">Orange</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Extensions to the Access Control Lists (ACLs) YANG Model</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">RFC 8519 defines a YANG data model for Access Control Lists
+(ACLs). This document discusses a set of extensions that fix many of
+the limitations of the ACL model as initially defined in RFC 8519.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Discussion of this document takes place on the
+    Network Modeling Working Group mailing list (netmod@ietf.org),
+    which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/netmod/">https://mailarchive.ietf.org/arch/browse/netmod/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+    <span><a href="https://github.com/oscargdd/draft-dbb-netmod-enhanced-acl">https://github.com/oscargdd/draft-dbb-netmod-enhanced-acl</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 21 November 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-approach" class="xref">Approach</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-problem-statement-gap-analy" class="xref">Problem Statement &amp; Gap Analysis</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-suboptimal-configuration-la" class="xref">Suboptimal Configuration: Lack of Manipulating Lists of Prefixes</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-manageability-impossibility" class="xref">Manageability: Impossibility to Use Aliases or Defined Sets</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-bind-acls-to-devices-not-on" class="xref">Bind ACLs to Devices, Not Only Interfaces</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="xref">3.4</a>.  <a href="#name-partial-or-lack-of-ipv4-ipv" class="xref">Partial or Lack of IPv4/IPv6 Fragment Handling</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="xref">3.5</a>.  <a href="#name-suboptimal-tcp-flags-handli" class="xref">Suboptimal TCP Flags Handling</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6">
+                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="xref">3.6</a>.  <a href="#name-rate-limit-action" class="xref">Rate-Limit Action</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7">
+                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="xref">3.7</a>.  <a href="#name-payload-based-filtering" class="xref">Payload-based Filtering</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8">
+                <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="xref">3.8</a>.  <a href="#name-reuse-the-acls-content-acro" class="xref">Reuse the ACLs Content Across Several Devices</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-overall-module-structure" class="xref">Overall Module Structure</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-enhanced-acl" class="xref">Enhanced ACL</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-tba" class="xref">TBA</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-yang-modules" class="xref">YANG Modules</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-enhanced-acl-2" class="xref">Enhanced ACL</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-security-considerations-tbc" class="xref">Security Considerations (TBC)</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-uri-registration-tbc" class="xref">URI Registration (TBC)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-yang-module-name-registrati" class="xref">YANG Module Name Registration (TBC)</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-acknowledgements" class="xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1"><span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> defines Acces control lists (ACLs) as a
+user-ordered set of filtering rules. The model targets the
+configuration of the filtering behaviour of a device. However, the
+model structure, as defined in <span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span>, suffers from a set of limitations. This
+document describes these limitations and proposes an enhanced ACL
+structure.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The motivation of such enhanced ACL structure is discussed in detail in (#ps).<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">When managing ACLs, it is common for network operators to group
+matching elements in pre-defined sets. The consolidation into matches
+allows reducing the number of rules, especially in large scale
+networks. If it is needed, for example, to find a match against 100
+IP addresses (or prefixes), a single rule will suffice rather than creating
+individual Access Control Entries (ACEs) for each IP address (or prefix). In
+doing so, implementations would optimize the performance of matching
+lists vs multiple rules matching.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">The enhanced ACL structure is also meant to facilitate the management of
+network operators. Instead of entering the IP address or port number
+literals, using user-named lists decouples the creation of the rule
+from the management of the sets. Hence, it is possible to remove/add
+ entries to the list without redefining the (parent) ACL
+rule.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">In addition, the notion of Access Control List (ACL) and defined sets
+ is generalized so that it is not device-specific as per <span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span>.  ACLs
+ and defined sets may be defined at network / administrative domain level
+ and associated to devices. This approach facilitates the reusability across multiple
+  network elements. For example, managing the IP prefix sets from a network
+   level makes it easier to maintain by the security groups.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">Network operators maintain sets of IP prefixes that are related to each other,
+e.g., deny-lists or accept-lists that are associated with those provided by a
+ VPN customer. These lists are maintained and manipulated by security expert teams.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">Note that ACLs are used locally in devices but are triggered by other
+tools such as DDoS mitigation <span>[<a href="#RFC9132" class="xref">RFC9132</a>]</span> or BGP Flow Spec <span>[<a href="#RFC8955" class="xref">RFC8955</a>]</span>
+        <span>[<a href="#RFC8956" class="xref">RFC8956</a>]</span>. Therefore, supporting means to easily map to the filtering rules conveyed in
+messages triggered by  hese tools is valuable from a network operation standpoint.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<div id="terminology">
+<section id="section-1.1">
+        <h3 id="name-terminology">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.1-1">The keywords <strong>MUST</strong>, <strong>MUST NOT</strong>, <strong>REQUIRED</strong>, <strong>SHALL</strong>, <strong>SHALL NOT</strong>, <strong>SHOULD</strong>,
+<strong>SHOULD NOT</strong>, <strong>RECOMMENDED</strong>, <strong>MAY</strong>, and <strong>OPTIONAL</strong>, when they appear in this
+document, are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">The terminology for describing YANG modules is defined in <span>[<a href="#RFC7950" class="xref">RFC7950</a>]</span>.
+The meaning of the symbols in the tree diagrams is defined in
+<span>[<a href="#RFC8340" class="xref">RFC8340</a>]</span>.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">In adition to the terms defined in <span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span>, this document makes use of the following terms:<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-4.1">Defined set: Refers to reusable description of one or multiple information elements (e.g., IP address, IP prefix, port number, ICMP type).<a href="#section-1.1-4.1" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="approach">
+<section id="section-2">
+      <h2 id="name-approach">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-approach" class="section-name selfRef">Approach</a>
+      </h2>
+<p id="section-2-1">This first version of the document does not include on purpose any YANG module. This is because the authors are seeking a work direction from the netmod WG whether the missing features can be accomplished by means of augmentations or whether an ACL-bis document is more appropriate.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Future versions of the document will include a YANG module that will reflect the WG feedback. A network wide module, in adition to the device module, might be required. The decision on whether a single module is sufficient to handle both device and network levels or two separate ones will be based on WG feedback.<a href="#section-2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="ps">
+<section id="section-3">
+      <h2 id="name-problem-statement-gap-analy">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-problem-statement-gap-analy" class="section-name selfRef">Problem Statement &amp; Gap Analysis</a>
+      </h2>
+<div id="suboptimal-configuration-lack-of-manipulating-lists-of-prefixes">
+<section id="section-3.1">
+        <h3 id="name-suboptimal-configuration-la">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-suboptimal-configuration-la" class="section-name selfRef">Suboptimal Configuration: Lack of Manipulating Lists of Prefixes</a>
+        </h3>
+<p id="section-3.1-1">IP prefix related data nodes, e.g., "destination-ipv4-network"
+or "destination-ipv6-network", do not allow manipulating a list of IP
+prefixes, which may lead to manipulating large files. The same issue
+is encountered when ACLs have to be in place to mitigate DDoS
+attacks (e.g., <span>[<a href="#RFC9132" class="xref">RFC9132</a>]</span> when a set of sources are involved in such
+an attack. The situation is even worse when both a list of sources
+and destination prefixes are involved.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2"><a href="#example" class="xref">Figure 1</a> shows an example of the required ACL configuration for filtering traffic from two prefixes.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<span id="name-example-illustrating-sub-op"></span><div id="example">
+<figure id="figure-1">
+          <div class="alignLeft art-text artwork" id="section-3.1-3.1">
+<pre>
+{
+  "ietf-access-control-list:acls": {
+    "acl": [
+      {
+        "name": "first-prefix",
+        "type": "ipv6-acl-type",
+        "aces": {
+          "ace": [
+            {
+              "name": "my-test-ace",
+              "matches": {
+                "ipv6": {
+                  "destination-ipv6-network":
+                    "2001:db8:6401:1::/64",
+                  "source-ipv6-network":
+                    "2001:db8:1234::/96",
+                  "protocol": 17,
+                  "flow-label": 10000
+                },
+                "udp": {
+                  "source-port": {
+                    "operator": "lte",
+                    "port": 80
+                  },
+                  "destination-port": {
+                    "operator": "neq",
+                    "port": 1010
+                  }
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "second-prefix",
+        "type": "ipv6-acl-type",
+        "aces": {
+          "ace": [
+            {
+              "name": "my-test-ace",
+              "matches": {
+                "ipv6": {
+                  "destination-ipv6-network":
+                    "2001:db8:6401:c::/64",
+                  "source-ipv6-network":
+                    "2001:db8:1234::/96",
+                  "protocol": 17,
+                  "flow-label": 10000
+                },
+                "udp": {
+                  "source-port": {
+                    "operator": "lte",
+                    "port": 80
+                  },
+                  "destination-port": {
+                    "operator": "neq",
+                    "port": 1010
+                  }
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-example-illustrating-sub-op" class="selfRef">Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.1-4">Such configuration is suboptimal for both:
+- Network controllers that need to manipulate large files. All or a subset fo this configuration will need to be passed to the undelrying network devices.
+- Devices may receive such confirguration and thus will need to maintain it locally.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">(<a href="#example_1" class="xref">Figure 2</a> depicts an example of an optimized strcuture:<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<span id="name-example-illustrating-optima"></span><div id="example_1">
+<figure id="figure-2">
+          <div class="alignLeft art-text artwork" id="section-3.1-6.1">
+<pre>
+{
+  "ietf-access-control-list:acls": {
+    "acl": [
+      {
+        "name": "prefix-list-support",
+        "type": "ipv6-acl-type",
+        "aces": {
+          "ace": [
+            {
+              "name": "my-test-ace",
+              "matches": {
+                "ipv6": {
+                  "destination-ipv6-network": [
+                    "2001:db8:6401:1::/64",
+                    "2001:db8:6401:c::/64"
+                  ],
+                  "source-ipv6-network":
+                    "2001:db8:1234::/96",
+                  "protocol": 17,
+                  "flow-label": 10000
+                },
+                "udp": {
+                  "source-port": {
+                    "operator": "lte",
+                    "port": 80
+                  },
+                  "destination-port": {
+                    "operator": "neq",
+                    "port": 1010
+                  }
+                }
+              },
+              "actions": {
+                "forwarding": "accept"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-example-illustrating-optima" class="selfRef">Example Illustrating Optimal Use of the ACL Model in a Network Context.</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="manageability-impossibility-to-use-aliases-or-defined-sets">
+<section id="section-3.2">
+        <h3 id="name-manageability-impossibility">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-manageability-impossibility" class="section-name selfRef">Manageability: Impossibility to Use Aliases or Defined Sets</a>
+        </h3>
+<p id="section-3.2-1">The same approach as the one discussed for IP prefixes can be generalized by introduing the concept of "aliases" or "defined sets".<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The defined sets are reusable definitions across several ACLs. Each category is modelled in YANG as a list of parameters related to the class it represents. The following sets can be considered:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-3.1">Prefix sets: Used to create lists of IPv4 or IPv6 prefixes.<a href="#section-3.2-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-3.2">Protocol sets: Used to create a list of protocols.<a href="#section-3.2-3.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-3.3">Port number sets: Used to create lists of TCP or UDP port values (or any other transport protocol that makes uses of port numbers). The identity of the protcols is identified by the protocol set, if present. Otherwise, a set apply to any protocol.<a href="#section-3.2-3.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-3.4">ICMP sets: Uses to create lists of ICMP-based filters. This applies only when the protocol is set to ICMP or ICMPv6.<a href="#section-3.2-3.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-3.2-4">A candidate structure is shown in <a href="#example_sets" class="xref">Figure 3</a>:<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<span id="name-examples-of-defined-sets"></span><div id="example_sets">
+<figure id="figure-3">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.2-5.1">
+<pre>
+     +--rw defined-sets
+     |  +--rw prefix-sets
+     |  |  +--rw prefix-set* [name mode]
+     |  |     +--rw name        string
+     |  |     +--rw mode        enumeration
+     |  |     +--rw ip-prefix*   inet:ip-prefix
+     |  +--rw port-sets
+     |  |  +--rw port-set* [name]
+     |  |     +--rw name    string
+     |  |     +--rw port*   inet:port-number
+     |  +--rw protocol-sets
+     |  |  +--rw protocol-set* [name]
+     |  |     +--rw name             string
+     |  |     +--rw protocol-name*   identityref
+     |  +--rw icmp-type-sets
+     |     +--rw icmp-type-set* [name]
+     |        +--rw name     string
+     |        +--rw types* [type]
+     |           +--rw type              uint8
+     |           +--rw code?             uint8
+     |           +--rw rest-of-header?   binary
+</pre>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-examples-of-defined-sets" class="selfRef">Examples of Defined Sets.</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="bind-acls-to-devices-not-only-interfaces">
+<section id="section-3.3">
+        <h3 id="name-bind-acls-to-devices-not-on">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-bind-acls-to-devices-not-on" class="section-name selfRef">Bind ACLs to Devices, Not Only Interfaces</a>
+        </h3>
+<p id="section-3.3-1">In the context of network management, an ACL may be enforced in many network locations. As such, the ACL module should allow binding an ACL to multiple devices, not only (abstract) interfaces.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">The ACL name must, thus, be unique at the scale of the network, but still the same name may be used in many devices when enforcing node-specific ACLs.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="partial-or-lack-of-ipv4ipv6-fragment-handling">
+<section id="section-3.4">
+        <h3 id="name-partial-or-lack-of-ipv4-ipv">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-partial-or-lack-of-ipv4-ipv" class="section-name selfRef">Partial or Lack of IPv4/IPv6 Fragment Handling</a>
+        </h3>
+<p id="section-3.4-1"><span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> does not support fragment handling capability for IPv6 but
+offers a partial support for IPv4 by means of 'flags'.  Nevertheless,
+the use of 'flags' is problematic since it does not allow a bitmask
+to be defined.  For example, setting other bits not covered by the
+'flags' filtering clause in a packet will allow that packet to get
+through (because it won't match the ACE).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to efficiently handle fragment-related filtering rules. Some examples to illustrate how 'fragment' can be used are provided below.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.4-3"><a href="#example_2" class="xref">Figure 4</a> shows the content of a candidate POST request to allow the traffic destined to 198.51.100.0/24 and UDP port number 53, but to drop all fragmented
+packets.  The following ACEs are defined (in this order):<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.4-4.1">"drop-all-fragments" ACE: discards all fragments.<a href="#section-3.4-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.4-4.2">"allow-dns-packets" ACE: accepts DNS packets destined to 198.51.100.0/24.<a href="#section-3.4-4.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<span id="name-example-illustrating-canddi"></span><div id="example_2">
+<figure id="figure-4">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.4-5.1">
+<pre>
+{
+     "ietf-access-control-list:acls": {
+       "acl": [
+         {
+           "name": "dns-fragments",
+           "type": "ipv4-acl-type",
+           "aces": {
+             "ace": [
+               {
+                 "name": "drop-all-fragments",
+                 "matches": {
+                   "ipv4": {
+                     "fragment": {
+                       "operator": "match",
+                       "type": "isf"
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "drop"
+                 }
+               },
+               {
+                 "name": "allow-dns-packets",
+                 "matches": {
+                   "ipv4": {
+                     "destination-ipv4-network": "198.51.100.0/24"
+                   },
+                   "udp": {
+                     "destination-port": {
+                       "operator": "eq",
+                       "port": 53
+                     }
+                   },
+                   "actions": {
+                     "forwarding": "accept"
+                   }
+                 }
+               }
+             ]
+           }
+         }
+       ]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<a href="#name-example-illustrating-canddi" class="selfRef">Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets.</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.4-6"><a href="#example_3" class="xref">Figure 5</a> shows an example of the body of a candidate POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):<a href="#section-3.4-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.4-7.1">"drop-all-fragments" ACE: discards all fragments (including atomic fragments). That is, IPv6 packets that include a Fragment header (44) are dropped.<a href="#section-3.4-7.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.4-7.2">"allow-dns-packets" ACE: accepts DNS packets destined to 2001:db8::/32.<a href="#section-3.4-7.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<span id="name-example-illustrating-canddia"></span><div id="example_3">
+<figure id="figure-5">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.4-8.1">
+<pre>
+    {
+     "ietf-access-control-list:acls": {
+       "acl": [
+         {
+           "name": "dns-fragments",
+           "type": "ipv6-acl-type",
+           "aces": {
+             "ace": [
+               {
+                 "name": "drop-all-fragments",
+                 "matches": {
+                   "ipv6": {
+                     "fragment": {
+                       "operator": "match",
+                       "type": "isf"
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "drop"
+                 }
+               },
+               {
+                 "name": "allow-dns-packets",
+                 "matches": {
+                   "ipv6": {
+                     "destination-ipv6-network": "2001:db8::/32"
+                   },
+                   "udp": {
+                     "destination-port": {
+                       "operator": "eq",
+                       "port": 53
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "accept"
+                 }
+               }
+             ]
+           }
+         }
+       ]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<a href="#name-example-illustrating-canddia" class="selfRef">Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets.</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="suboptimal-tcp-flags-handling">
+<section id="section-3.5">
+        <h3 id="name-suboptimal-tcp-flags-handli">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-suboptimal-tcp-flags-handli" class="section-name selfRef">Suboptimal TCP Flags Handling</a>
+        </h3>
+<p id="section-3.5-1"><span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules. Some examples to illustrate the use of such field are discussed below.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2"><a href="#example_4" class="xref">Figure 6</a> shows an example of a candidate request to install a filter to discard incoming TCP messages having all flags unset.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<span id="name-example-to-deny-tcp-null-at"></span><div id="example_4">
+<figure id="figure-6">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.5-3.1">
+<pre>
+  {
+     "ietf-access-control-list:acls": {
+       "acl": [{
+         "name": "tcp-flags-example",
+         "aces": {
+           "ace": [{
+             "name": "null-attack",
+             "matches": {
+               "tcp": {
+                 "flags-bitmask": {
+                   "operator": "not any",
+                   "bitmask": 4095
+                 }
+               }
+             },
+             "actions": {
+               "forwarding": "drop"
+             }
+           }]
+         }
+       }]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<a href="#name-example-to-deny-tcp-null-at" class="selfRef">Example to Deny TCP Null Attack Messages</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="rate-limit-action">
+<section id="section-3.6">
+        <h3 id="name-rate-limit-action">
+<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-rate-limit-action" class="section-name selfRef">Rate-Limit Action</a>
+        </h3>
+<p id="section-3.6-1"><span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> specifies that forwarding actions can be 'accept' (i.e., accept matching
+   traffic), 'drop' (i.e., drop matching traffic without sending any
+   ICMP error message), or 'reejct' (i.e., drop matching traffic and send an ICMP error message to the source). Howover, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by the ACL model.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-2">(#example_5) shows a candidate ACL example to rate-limit incoming SYNs during a SYN flood attack.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<span id="name-example-rate-limit-incoming"></span><div id="example_5">
+<figure id="figure-7">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.6-3.1">
+<pre>
+  {
+     "ietf-access-control-list:acls": {
+       "acl": [{
+         "name": "tcp-flags-example-with-rate-limit",
+         "aces": {
+           "ace": [{
+             "name": "rate-limit-syn",
+             "matches": {
+               "tcp": {
+                 "flags-bitmask": {
+                   "operator": "match",
+                   "bitmask": 2
+                 }
+               }
+             },
+             "actions": {
+               "forwarding": "accept",
+               "rate-limit": "20.00"
+             }
+           }]
+         }
+       }]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<a href="#name-example-rate-limit-incoming" class="selfRef">Example Rate-Limit Incoming TCP SYNs</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="payload-based-filtering">
+<section id="section-3.7">
+        <h3 id="name-payload-based-filtering">
+<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-payload-based-filtering" class="section-name selfRef">Payload-based Filtering</a>
+        </h3>
+<p id="section-3.7-1">Some transport protocols use existing protocols (e.g., TCP or UDP) as substrate. The match criteria for such protocols may rely upon the 'protocol' under 'l3', TCP/UDP match criteria, part of the TCP/UDP payload, or a combination thereof. <span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> does not support matching based on the payload.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<p id="section-3.7-2">Likewise, the current version of the ACL model does not support filetering of encapsulated traffic.<a href="#section-3.7-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="reuse-the-acls-content-across-several-devices">
+<section id="section-3.8">
+        <h3 id="name-reuse-the-acls-content-acro">
+<a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-reuse-the-acls-content-acro" class="section-name selfRef">Reuse the ACLs Content Across Several Devices</a>
+        </h3>
+<p id="section-3.8-1">Having a global network view of the ACLs is highly valuable for service providers. An ACL could be defined and applied
+following the hierarchy of the network topology. So, an ACL can be
+defined at the network level and, then, that same ACL can be used (or referenced to)
+in several devices (including termination points) within the same network.<a href="#section-3.8-1" class="pilcrow">¶</a></p>
+<p id="section-3.8-2">This network/device ACLs differentiation introduces several new
+requirements, e.g.:<a href="#section-3.8-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.8-3.1">An ACL name can be used at both network and device levels.<a href="#section-3.8-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.8-3.2">An ACL content updated at the network level should imply
+a transaction that updates the relevant content in all the nodes using this
+ACL.<a href="#section-3.8-3.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.8-3.3">ACLs defined at the device level have a local meaning for the specific node.<a href="#section-3.8-3.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.8-3.4">A device can be associated with a router, a VRF, a
+logical system, or a virtual node. ACLs can be applied in physical and
+logical infrastructure.<a href="#section-3.8-3.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="overall-module-structure">
+<section id="section-4">
+      <h2 id="name-overall-module-structure">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-overall-module-structure" class="section-name selfRef">Overall Module Structure</a>
+      </h2>
+<div id="enhanced-acl">
+<section id="section-4.1">
+        <h3 id="name-enhanced-acl">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-enhanced-acl" class="section-name selfRef">Enhanced ACL</a>
+        </h3>
+<span id="name-enhanced-acl-tree"></span><div id="enh-acl-tree">
+<figure id="figure-8">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-4.1-1.1">
+<pre>
+module: ietf-acl-enh
+  augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
+            /ietf-acl:matches:
+    +--rw (payload)?
+       +--:(prefix-pattern)
+          +--rw prefix-pattern {match-on-payload}?
+             +--rw offset?       identityref
+             +--rw offset-end?   uint64
+             +--rw operator?     operator
+             +--rw prefix?       binary
+  augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
+            /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4:
+    +--rw fragment
+       +--rw operator?   operator
+       +--rw type?       fragment-type
+  augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
+            /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6:
+    +--rw fragment
+       +--rw operator?   operator
+       +--rw type?       fragment-type
+  augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
+            /ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp:
+    +--rw flags-bitmask
+       +--rw operator?   operator
+       +--rw bitmask?    uint16
+  augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
+            /ietf-acl:actions:
+    +--rw rate-limit?   decimal64
+</pre>
+</div>
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<a href="#name-enhanced-acl-tree" class="selfRef">Enhanced ACL tree</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="tba">
+<section id="section-4.2">
+        <h3 id="name-tba">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-tba" class="section-name selfRef">TBA</a>
+      </h3>
+</section>
+</div>
+</section>
+</div>
+<div id="yang-modules">
+<section id="section-5">
+      <h2 id="name-yang-modules">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-yang-modules" class="section-name selfRef">YANG Modules</a>
+      </h2>
+<div id="enhanced-acl-1">
+<section id="section-5.1">
+        <h3 id="name-enhanced-acl-2">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-enhanced-acl-2" class="section-name selfRef">Enhanced ACL</a>
+        </h3>
+<div id="enh-acl-module">
+<figure id="figure-9">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-5.1-1.1">
+<pre>
+module ietf-acl-enh {
+  yang-version 1.1;
+  namespace "urn:ietf:params:xml:ns:yang:ietf-acl-enh";
+  prefix enh-acl;
+
+  import ietf-access-control-list {
+    prefix ietf-acl;
+  }
+
+  organization
+    "IETF NETMOD Working Group";
+  contact
+    "WG Web:   &lt;https://datatracker.ietf.org/wg/netmod/&gt;
+     WG List:  &lt;mailto:netmod@ietf.org&gt;
+
+     Author:    Mohamed Boucadair
+               &lt;mailto:mohamed.boucadair@orange.com&gt;
+     Author:    Samier Barguil
+               &lt;mailto:samier.barguilgiraldo.ext@telefonica.com&gt;
+     Author:    Oscar Gonzalez de Dios
+               &lt;mailto:oscar.gonzalezdedios@telefonica.com&gt;";
+  description
+    "This module contains YANG definitions for enhanced ACLs.
+
+     Copyright (c) 2021 IETF Trust and the persons identified as
+     authors of the code.  All rights reserved.
+
+     Redistribution and use in source and binary forms, with or
+     without modification, is permitted pursuant to, and subject
+     to the license terms contained in, the Simplified BSD License
+     set forth in Section 4.c of the IETF Trust's Legal Provisions
+     Relating to IETF Documents
+     (http://trustee.ietf.org/license-info).
+
+     This version of this YANG module is part of RFC XXXX; see
+     the RFC itself for full legal notices.";
+
+  revision 2021-12-07 {
+    description
+      "Initial revision.";
+    reference
+      "RFC XXXX: xxxxx";
+  }
+
+  feature match-on-payload {
+    description
+      "Match based on a pattern is supported.";
+  }
+
+  identity offset-type {
+    description
+      "Base identity for payload offset type.";
+  }
+
+  identity layer3 {
+    base offset-type;
+    description
+      "IP header.";
+  }
+
+  identity layer4 {
+    base offset-type;
+    description
+      "Transport header (e.g., TCP or UDP).";
+  }
+
+  identity payload {
+    base offset-type;
+    description
+      "Transport payload. For example, this represents the beginning
+       of the TCP data right after any TCP options.";
+  }
+
+  typedef operator {
+    type bits {
+      bit not {
+        position 0;
+        description
+          "If set, logical negation of operation.";
+      }
+      bit match {
+        position 1;
+        description
+          "Match bit.  If set, this is a bitwise match operation
+           defined as '(data &amp; value) == value'; if unset, (data &amp;
+           value) evaluates to TRUE if any of the bits in the value
+           mask are set in the data , i.e., '(data &amp; value) != 0'.";
+      }
+    }
+    description
+      "How to apply the defined bitmask.";
+  }
+
+  typedef fragment-type {
+    type bits {
+      bit df {
+        position 0;
+        description
+          "Don't fragment bit for IPv4.
+           Must be set to 0 when it appears in an IPv6 filter.";
+      }
+      bit isf {
+        position 1;
+        description
+          "Is a fragment.";
+      }
+      bit ff {
+        position 2;
+        description
+          "First fragment.";
+      }
+      bit lf {
+        position 3;
+        description
+          "Last fragment.";
+      }
+    }
+    description
+      "Different fragment types to match against.";
+  }
+
+  grouping tcp-flags {
+    description
+      "Operations on TCP flags.";
+    leaf operator {
+      type operator;
+      default "match";
+      description
+        "How to interpret the TCP flags.";
+    }
+    leaf bitmask {
+      type uint16;
+      description
+        "Bitmask values can be encoded as a 1- or 2-byte bitmask.
+         When a single byte is specified, it matches byte 13
+         of the TCP header, which contains bits 8 though 15
+         of the 4th 32-bit word.  When a 2-byte encoding is used,
+         it matches bytes 12 and 13 of the TCP header with
+         the bitmask fields corresponding to the TCP data offset
+         field being ignored for purposes of matching.";
+    }
+  }
+
+  grouping fragment-fields {
+    description
+      "Operations on fragment types.";
+    leaf operator {
+      type operator;
+      default "match";
+      description
+        "How to interpret the fragment type.";
+    }
+    leaf type {
+      type fragment-type;
+      description
+        "What fragment type to look for.";
+    }
+  }
+
+  grouping payload {
+    description
+      "Operations on payload match.";
+    leaf offset {
+      type identityref {
+        base offset-type;
+      }
+      description
+        "Indicates the payload offset.";
+    }
+    leaf offset-end {
+      type uint64;
+      description
+        "Indicates the number of bytes to cover when
+         performing the prefix match.";
+    }
+    leaf operator {
+      type operator;
+      default "match";
+      description
+        "How to interpret the prefix match.";
+    }
+    leaf prefix {
+      type binary;
+      description
+        "The pattern to match against.";
+    }
+  }
+
+  augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
+        + "/ietf-acl:ace/ietf-acl:matches" {
+    description
+      "Add a new match types.";
+    choice payload {
+      description
+        "Match a prefix pattern.";
+      container prefix-pattern {
+        if-feature "match-on-payload";
+        description
+          "Rule to perform payload-based match.";
+        uses payload;
+      }
+    }
+  }
+
+  augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
+       + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4" {
+    description
+      "Handle non-initial and initial fragments for IPv4 packets.";
+    container fragment {
+      description
+        "Indicates how to handle IPv4 fragments.";
+      uses fragment-fields;
+    }
+  }
+
+  augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
+       + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
+    description
+      "Handle non-initial and initial fragments for IPv6 packets.";
+    container fragment {
+      description
+        "Indicates how to handle IPv6 fragments.";
+      uses fragment-fields;
+    }
+  }
+
+  augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
+        + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp" {
+    description
+      "Handle TCP flags.";
+    container flags-bitmask {
+      description
+        "Indicates how to handle TCP flags.";
+      uses tcp-flags;
+    }
+  }
+
+  augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
+        + "/ietf-acl:ace/ietf-acl:actions" {
+    description
+      "rate-limit action.";
+    leaf rate-limit {
+      when "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/"
+         + "ietf-acl:ace/ietf-acl:actions/"
+         + "ietf-acl:forwarding = 'ietf-acl:accept'" {
+        description
+          "rate-limit valid only when accept action is used.";
+      }
+      type decimal64 {
+        fraction-digits 2;
+      }
+      description
+        "rate-limit traffic.";
+    }
+  }
+}
+</pre>
+</div>
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a></figcaption></figure>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations-tbc">
+<section id="section-6">
+      <h2 id="name-security-considerations-tbc">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations-tbc" class="section-name selfRef">Security Considerations (TBC)</a>
+      </h2>
+<p id="section-6-1">The YANG modules specified in this document define a schema for data
+   that is designed to be accessed via network management protocol such
+   as NETCONF <span>[<a href="#RFC6241" class="xref">RFC6241</a>]</span> or RESTCONF <span>[<a href="#RFC8040" class="xref">RFC8040</a>]</span>.  The lowest NETCONF layer
+   is the secure transport layer, and the mandatory-to-implement secure
+   transport is Secure Shell (SSH) <span>[<a href="#RFC6242" class="xref">RFC6242</a>]</span>.  The lowest RESTCONF layer
+   is HTTPS, and the mandatory-to-implement secure transport is TLS
+   <span>[<a href="#RFC8446" class="xref">RFC8446</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">The Network Configuration Access Control Model (NACM) <span>[<a href="#RFC8341" class="xref">RFC8341</a>]</span> provides the means to restrict access for particular NETCONF or RESTCONF users to a preconfigured subset of all available NETCONF or RESTCONF protocol operations and content.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">There are a number of data nodes defined in this YANG module that are writable/creatable/deletable (i.e., config true, which is the default). These data nodes may be considered sensitive or vulnerable in some network environments. Write operations (e.g., edit-config) to these data nodes without proper protection can have a negative effect on network operations. These are the subtrees and data nodes and their sensitivity/vulnerability:<a href="#section-6-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-4.1">TBC<a href="#section-6-4.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-6-5">Some of the readable data nodes in this YANG module may be considered sensitive or vulnerable in some network environments. It is thus important to control read access (e.g., via get, get-config, or notification) to these data nodes. These are the subtrees and data nodes and their sensitivity/vulnerability:<a href="#section-6-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-6.1">TBC<a href="#section-6-6.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-7">
+      <h2 id="name-iana-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="uri-registration-tbc">
+<section id="section-7.1">
+        <h3 id="name-uri-registration-tbc">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-uri-registration-tbc" class="section-name selfRef">URI Registration (TBC)</a>
+        </h3>
+<p id="section-7.1-1">This document requests IANA to register the following URI in the "ns"
+   subregistry within the "IETF XML Registry" <span>[<a href="#RFC3688" class="xref">RFC3688</a>]</span>:
+~~~
+         URI: urn:ietf:params:xml:ns:yang:xxx
+         Registrant Contact: The IESG.
+         XML: N/A; the requested URI is an XML namespace.
+~~~<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="yang-module-name-registration-tbc">
+<section id="section-7.2">
+        <h3 id="name-yang-module-name-registrati">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-yang-module-name-registrati" class="section-name selfRef">YANG Module Name Registration (TBC)</a>
+        </h3>
+<p id="section-7.2-1">This document requests IANA to register the following YANG module in
+   the "YANG Module Names" subregistry <span>[<a href="#RFC6020" class="xref">RFC6020</a>]</span> within the "YANG
+   Parameters" registry.
+~~~
+         name: xxxx
+         namespace: urn:ietf:params:xml:ns:yang:ietf-xxx
+         maintained by IANA: N
+         prefix: xxxx
+         reference: RFC XXXX
+~~~<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<section id="section-8">
+      <h2 id="name-normative-references">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3688">[RFC3688]</dt>
+      <dd>
+<span class="refAuthor">Mealling, M.</span>, <span class="refTitle">"The IETF XML Registry"</span>, <span class="seriesInfo">BCP 81</span>, <span class="seriesInfo">RFC 3688</span>, <span class="seriesInfo">DOI 10.17487/RFC3688</span>, <time datetime="2004-01" class="refDate">January 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3688">https://www.rfc-editor.org/rfc/rfc3688</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6020">[RFC6020]</dt>
+      <dd>
+<span class="refAuthor">Bjorklund, M., Ed.</span>, <span class="refTitle">"YANG - A Data Modeling Language for the Network Configuration Protocol (NETCONF)"</span>, <span class="seriesInfo">RFC 6020</span>, <span class="seriesInfo">DOI 10.17487/RFC6020</span>, <time datetime="2010-10" class="refDate">October 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6020">https://www.rfc-editor.org/rfc/rfc6020</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6241">[RFC6241]</dt>
+      <dd>
+<span class="refAuthor">Enns, R., Ed.</span>, <span class="refAuthor">Bjorklund, M., Ed.</span>, <span class="refAuthor">Schoenwaelder, J., Ed.</span>, and <span class="refAuthor">A. Bierman, Ed.</span>, <span class="refTitle">"Network Configuration Protocol (NETCONF)"</span>, <span class="seriesInfo">RFC 6241</span>, <span class="seriesInfo">DOI 10.17487/RFC6241</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6241">https://www.rfc-editor.org/rfc/rfc6241</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6242">[RFC6242]</dt>
+      <dd>
+<span class="refAuthor">Wasserman, M.</span>, <span class="refTitle">"Using the NETCONF Protocol over Secure Shell (SSH)"</span>, <span class="seriesInfo">RFC 6242</span>, <span class="seriesInfo">DOI 10.17487/RFC6242</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6242">https://www.rfc-editor.org/rfc/rfc6242</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7950">[RFC7950]</dt>
+      <dd>
+<span class="refAuthor">Bjorklund, M., Ed.</span>, <span class="refTitle">"The YANG 1.1 Data Modeling Language"</span>, <span class="seriesInfo">RFC 7950</span>, <span class="seriesInfo">DOI 10.17487/RFC7950</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7950">https://www.rfc-editor.org/rfc/rfc7950</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8040">[RFC8040]</dt>
+      <dd>
+<span class="refAuthor">Bierman, A.</span>, <span class="refAuthor">Bjorklund, M.</span>, and <span class="refAuthor">K. Watsen</span>, <span class="refTitle">"RESTCONF Protocol"</span>, <span class="seriesInfo">RFC 8040</span>, <span class="seriesInfo">DOI 10.17487/RFC8040</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8040">https://www.rfc-editor.org/rfc/rfc8040</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8340">[RFC8340]</dt>
+      <dd>
+<span class="refAuthor">Bjorklund, M.</span> and <span class="refAuthor">L. Berger, Ed.</span>, <span class="refTitle">"YANG Tree Diagrams"</span>, <span class="seriesInfo">BCP 215</span>, <span class="seriesInfo">RFC 8340</span>, <span class="seriesInfo">DOI 10.17487/RFC8340</span>, <time datetime="2018-03" class="refDate">March 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8340">https://www.rfc-editor.org/rfc/rfc8340</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8341">[RFC8341]</dt>
+      <dd>
+<span class="refAuthor">Bierman, A.</span> and <span class="refAuthor">M. Bjorklund</span>, <span class="refTitle">"Network Configuration Access Control Model"</span>, <span class="seriesInfo">STD 91</span>, <span class="seriesInfo">RFC 8341</span>, <span class="seriesInfo">DOI 10.17487/RFC8341</span>, <time datetime="2018-03" class="refDate">March 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8341">https://www.rfc-editor.org/rfc/rfc8341</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8446">[RFC8446]</dt>
+      <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8519">[RFC8519]</dt>
+      <dd>
+<span class="refAuthor">Jethanandani, M.</span>, <span class="refAuthor">Agarwal, S.</span>, <span class="refAuthor">Huang, L.</span>, and <span class="refAuthor">D. Blair</span>, <span class="refTitle">"YANG Data Model for Network Access Control Lists (ACLs)"</span>, <span class="seriesInfo">RFC 8519</span>, <span class="seriesInfo">DOI 10.17487/RFC8519</span>, <time datetime="2019-03" class="refDate">March 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8519">https://www.rfc-editor.org/rfc/rfc8519</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8955">[RFC8955]</dt>
+      <dd>
+<span class="refAuthor">Loibl, C.</span>, <span class="refAuthor">Hares, S.</span>, <span class="refAuthor">Raszuk, R.</span>, <span class="refAuthor">McPherson, D.</span>, and <span class="refAuthor">M. Bacher</span>, <span class="refTitle">"Dissemination of Flow Specification Rules"</span>, <span class="seriesInfo">RFC 8955</span>, <span class="seriesInfo">DOI 10.17487/RFC8955</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8955">https://www.rfc-editor.org/rfc/rfc8955</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8956">[RFC8956]</dt>
+      <dd>
+<span class="refAuthor">Loibl, C., Ed.</span>, <span class="refAuthor">Raszuk, R., Ed.</span>, and <span class="refAuthor">S. Hares, Ed.</span>, <span class="refTitle">"Dissemination of Flow Specification Rules for IPv6"</span>, <span class="seriesInfo">RFC 8956</span>, <span class="seriesInfo">DOI 10.17487/RFC8956</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8956">https://www.rfc-editor.org/rfc/rfc8956</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9132">[RFC9132]</dt>
+    <dd>
+<span class="refAuthor">Boucadair, M., Ed.</span>, <span class="refAuthor">Shallow, J.</span>, and <span class="refAuthor">T. Reddy.K</span>, <span class="refTitle">"Distributed Denial-of-Service Open Threat Signaling (DOTS) Signal Channel Specification"</span>, <span class="seriesInfo">RFC 9132</span>, <span class="seriesInfo">DOI 10.17487/RFC9132</span>, <time datetime="2021-09" class="refDate">September 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9132">https://www.rfc-editor.org/rfc/rfc9132</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="acknowledgements">
+<section id="appendix-A">
+      <h2 id="name-acknowledgements">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="appendix-A-1">Many thanks to Jon Shallow and Miguel Cros for the discussion when preparing this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Oscar Gonzalez de Dios</span></div>
+<div dir="auto" class="left"><span class="org">Telefonica</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:oscar.gonzalezdedios@telefonica.com" class="email">oscar.gonzalezdedios@telefonica.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Samier Barguil</span></div>
+<div dir="auto" class="left"><span class="org">Telefonica</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:samier.barguilgiraldo.ext@telefonica.com" class="email">samier.barguilgiraldo.ext@telefonica.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Mohamed Boucadair</span></div>
+<div dir="auto" class="left"><span class="org">Orange</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mohamed.boucadair@orange.com" class="email">mohamed.boucadair@orange.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

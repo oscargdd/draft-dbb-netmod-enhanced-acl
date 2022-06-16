@@ -82,7 +82,7 @@ tools such as DDoS mitigation {{!RFC9132}} or BGP Flow Spec {{!RFC8955}}
 {{!RFC8956}}. Therefore, supporting means to easily map to the filtering rules conveyed in
 messages triggered by  hese tools is valuable from a network operation standpoint.
 
-## Terminology
+# Terminology
 
 The keywords **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**,
 **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL**, when they appear in this

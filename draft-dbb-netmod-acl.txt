@@ -1323,27 +1323,27 @@ Table of Contents
               RFC 8519, DOI 10.17487/RFC8519, March 2019,
               <https://www.rfc-editor.org/rfc/rfc8519>.
 
-   [RFC8955]  Loibl, C., Hares, S., Raszuk, R., McPherson, D., and M.
-              Bacher, "Dissemination of Flow Specification Rules",
-              RFC 8955, DOI 10.17487/RFC8955, December 2020,
-              <https://www.rfc-editor.org/rfc/rfc8955>.
-
    [RFC8956]  Loibl, C., Ed., Raszuk, R., Ed., and S. Hares, Ed.,
               "Dissemination of Flow Specification Rules for IPv6",
               RFC 8956, DOI 10.17487/RFC8956, December 2020,
               <https://www.rfc-editor.org/rfc/rfc8956>.
-
-   [RFC9132]  Boucadair, M., Ed., Shallow, J., and T. Reddy.K,
-              "Distributed Denial-of-Service Open Threat Signaling
-              (DOTS) Signal Channel Specification", RFC 9132,
-              DOI 10.17487/RFC9132, September 2021,
-              <https://www.rfc-editor.org/rfc/rfc9132>.
 
 8.2.  Informative References
 
    [RFC8340]  Bjorklund, M. and L. Berger, Ed., "YANG Tree Diagrams",
               BCP 215, RFC 8340, DOI 10.17487/RFC8340, March 2018,
               <https://www.rfc-editor.org/rfc/rfc8340>.
+
+   [RFC8955]  Loibl, C., Hares, S., Raszuk, R., McPherson, D., and M.
+              Bacher, "Dissemination of Flow Specification Rules",
+              RFC 8955, DOI 10.17487/RFC8955, December 2020,
+              <https://www.rfc-editor.org/rfc/rfc8955>.
+
+   [RFC9132]  Boucadair, M., Ed., Shallow, J., and T. Reddy.K,
+              "Distributed Denial-of-Service Open Threat Signaling
+              (DOTS) Signal Channel Specification", RFC 9132,
+              DOI 10.17487/RFC9132, September 2021,
+              <https://www.rfc-editor.org/rfc/rfc9132>.
 
 Appendix A.  Acknowledgements
 

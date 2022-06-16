@@ -518,6 +518,40 @@ requirements, e.g.:
 
 ~~~ ascii-art
 module: ietf-acl-enh
+
+  augment /ietf-acl:acls/ietf-acl:acl:
+    +--rw defined-sets
+       +--rw IPv4-prefix-sets
+       |  +--rw prefix-set* [name]
+       |     +--rw name           string
+       |     +--rw description?   string
+       |     +--rw prefix*        inet:ipv4-prefix
+       +--rw IPv6-prefix-sets
+       |  +--rw prefix-set* [name]
+       |     +--rw name           string
+       |     +--rw description?   string
+       |     +--rw prefix*        inet:ipv6-prefix
+       +--rw port-sets
+       |  +--rw port-set* [name]
+       |     +--rw name    string
+       |     +--rw port* [id]
+       |        +--rw id                              string
+       |        +--rw (port)?
+       |           +--:(port-range-or-operator)
+       |              +--rw port-range-or-operator
+       |                 +--rw operator?   operator
+       |                 +--rw port        inet:port-number
+       +--rw protocol-sets
+       |  +--rw protocol-set* [name]
+       |     +--rw name        string
+       |     +--rw protocol*   union
+       +--rw icmp-type-sets
+          +--rw icmp-type-set* [name]
+             +--rw name     string
+             +--rw types* [type]
+                +--rw type              uint8
+                +--rw code?             uint8
+                +--rw rest-of-header?   binary
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches:
     +--rw (payload)?
@@ -530,25 +564,54 @@ module: ietf-acl-enh
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4:
     +--rw fragment
-       +--rw operator?   operator
-       +--rw type?       fragment-type
+    |  +--rw operator?   operator
+    |  +--rw type?       fragment-type
+    +--rw source-prefix-list?        leafref
+    +--rw destination-prefix-list?   leafref
+    +--rw next-header-set?           leafref
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6:
     +--rw fragment
-       +--rw operator?   operator
-       +--rw type?       fragment-type
+    |  +--rw operator?   operator
+    |  +--rw type?       fragment-type
+    +--rw source-prefix-list?        leafref
+    +--rw destination-prefix-list?   leafref
+    +--rw protocol-set?              leafref
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp:
     +--rw flags-bitmask
-       +--rw operator?   operator
-       +--rw bitmask?    uint16
+    |  +--rw operator?   operator
+    |  +--rw bitmask?    uint16
+    +--rw source-port-set?
+    |       -> ../../../../defined-sets/port-sets/port-set/name
+    +--rw destination-port-set?
+            -> ../../../../defined-sets/port-sets/port-set/name
+  augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
+            /ietf-acl:matches/ietf-acl:l4/ietf-acl:udp:
+    +--rw source-port-set?
+    |       -> ../../../../defined-sets/port-sets/port-set/name
+    +--rw destination-port-set?
+            -> ../../../../defined-sets/port-sets/port-set/name
+  augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
+            /ietf-acl:matches/ietf-acl:l4/ietf-acl:icmp:
+    +--rw icmp-set?   leafref
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:actions:
     +--rw rate-limit?   decimal64
 ~~~
 {: #enh-acl-tree title="Enhanced ACL tree"}
 
-## TBA
+## Defined sets
+
+Oscar Brief explanation on the different sets that can be managed and used in matches
+
+## Fragment Handling
+
+Med Brief explanation of the fragment handling
+
+## Rate limting action
+
+Med
 
 # YANG Modules
 
@@ -561,10 +624,19 @@ module ietf-acl-enh {
   namespace "urn:ietf:params:xml:ns:yang:ietf-acl-enh";
   prefix enh-acl;
 
+  import ietf-inet-types {
+     prefix inet;
+     reference
+       "RFC 6991: Common YANG Data Types";
+  }
+
   import ietf-access-control-list {
     prefix ietf-acl;
   }
 
+  import ietf-packet-fields {
+    prefix packet-fields;
+  }
   organization
     "IETF NETMOD Working Group";
   contact
@@ -580,12 +652,21 @@ module ietf-acl-enh {
   description
     "This module contains YANG definitions for enhanced ACLs.
 
-     Copyright (c) 2021 IETF Trust and the persons identified as
-     authors of the code.  All rights reserved.
+     This YANG module conforms to the Network Management
+     Datastore Architecture (NMDA), as described in RFC 8342.
+ 
+     The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
+     NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
+     'MAY', and 'OPTIONAL' in this document are to be interpreted as
+     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
+     they appear in all capitals, as shown here.
+ 
+     Copyright (c) 2022 IETF Trust and the persons identified as
+     authors of the code. All rights reserved.
 
      Redistribution and use in source and binary forms, with or
      without modification, is permitted pursuant to, and subject
-     to the license terms contained in, the Simplified BSD License
+     to the license terms contained in, the Revised BSD License
      set forth in Section 4.c of the IETF Trust's Legal Provisions
      Relating to IETF Documents
      (http://trustee.ietf.org/license-info).
@@ -593,7 +674,7 @@ module ietf-acl-enh {
      This version of this YANG module is part of RFC XXXX; see
      the RFC itself for full legal notices.";
 
-  revision 2021-12-07 {
+  revision 2022-06-16 {
     description
       "Initial revision.";
     reference
@@ -744,6 +825,155 @@ module ietf-acl-enh {
     }
   }
 
+  augment "/ietf-acl:acls/ietf-acl:acl" {
+    description 
+      "add a new container to store sets (prefix
+      sets, port sets, etc";
+    container defined-sets {
+      description
+        "Predefined sets of attributes used in policy match
+         statements.";
+      container IPv4-prefix-sets {
+        description
+          "Data definitions for a list of IPv4 or IPv6
+           prefixes which are matched as part of a policy.";
+        list prefix-set {
+          key "name";
+          description
+            "List of the defined prefix sets";
+          leaf name {
+            type string;
+            description
+              "Name of the prefix set -- this is used as a label to
+               reference the set in match conditions.";
+          }
+          leaf description {
+            type string;
+            description
+              "Defined Set description";
+          }
+          leaf-list prefix {
+             type inet:ipv4-prefix;
+             description
+               "List of IPv4 prefixes to be used in match 
+               conditions";
+          }
+        }
+      } 
+      container IPv6-prefix-sets {
+        description
+          "Data definitions for a list of IPv4 or IPv6
+           prefixes which are matched as part of a policy.";
+        list prefix-set {
+          key "name";
+          description
+            "List of the defined prefix sets";
+          leaf name {
+            type string;
+            description
+              "Name of the prefix set -- this is used as a label to
+               reference the set in match conditions.";
+          }       
+          leaf description {
+            type string;
+            description
+              "Defined Set description";
+          }
+          leaf-list prefix {
+             type inet:ipv6-prefix;
+             description
+               "List of IPv6 prefixes to be used in match 
+               conditions";
+          }
+        }
+      } 
+     container port-sets {
+        description
+          "Data definitions for a list of tags which can
+           be matched in policies.";
+        list port-set {
+          key "name";
+          description
+            "List of tag set definitions.";
+          leaf name {
+            type string;
+            description
+              "Name of the tag set -- this is used as a label to
+               reference the set in match conditions.";
+          }
+          list port {
+            key "id";
+            description
+              "Port number along with the operator on which to
+               match.";
+            leaf id {
+               type string;
+               description
+                  "Id of the list";
+            }
+            choice port {
+               description
+                 "Choice of specifying the port or referring to a
+                 group of port numbers.";
+               container port-range-or-operator {
+                  description
+                     "port definition.";
+                  uses packet-fields:port-range-or-operator;
+               }
+            }
+          }
+        }
+      }
+      container protocol-sets {
+        description
+          "Data definitions for a list of tags which can
+           be matched in policies.";
+        list protocol-set {
+          key "name";
+          description
+            "List of tag set definitions.";
+          leaf name {
+            type string;
+            description
+              "Name of the tag set -- this is used as a label to
+               reference the set in match conditions.";
+          }
+          leaf-list protocol {
+            type union {
+              type uint8;
+              type string; //Check if we can reuse IANA maintained module 
+            }
+            description
+              "Value of the tag set member.";
+          }
+        }
+      }
+      container icmp-type-sets {
+        description
+          "Data definitions for a list of tags which can
+           be matched in policies.";
+        list icmp-type-set {
+          key "name";
+          description
+            "List of tag set definitions.";
+          leaf name {
+            type string;
+            description
+              "Name of the tag set -- this is used as a label to
+               reference the set in match conditions.";
+          }
+          list types {
+            key "type";
+            description
+              "Includes a list of ICMP types.";
+            uses packet-fields:acl-icmp-header-fields;
+          }
+        }
+      }
+   }
+  }
+
+
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:matches" {
     description
@@ -761,7 +991,7 @@ module ietf-acl-enh {
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
-       + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4" {
+        + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4" {
     description
       "Handle non-initial and initial fragments for IPv4 packets.";
     container fragment {
@@ -769,16 +999,64 @@ module ietf-acl-enh {
         "Indicates how to handle IPv4 fragments.";
       uses fragment-fields;
     }
+    leaf source-prefix-list {
+       type leafref { 
+          path "../../../../defined-sets/IPv4-prefix-sets/prefix-set/name";
+       }
+          
+       description 
+          "reference to a prefix list to match the source address";
+    }
+    leaf destination-prefix-list {
+       type leafref { 
+          path "../../../../defined-sets/IPv4-prefix-sets/prefix-set/name";
+       }
+          
+       description 
+          "reference to a prefix list to match the destination address";
+    }
+    leaf next-header-set {
+       type leafref { 
+          path "../../../../defined-sets/protocol-sets/protocol-set/name";
+       }
+          
+       description 
+          "reference to a protocol set to match the next-header field";
+    }
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
-       + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
+        + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
     description
       "Handle non-initial and initial fragments for IPv6 packets.";
     container fragment {
       description
         "Indicates how to handle IPv6 fragments.";
       uses fragment-fields;
+    }
+    leaf source-prefix-list {
+       type leafref { 
+          path "../../../../defined-sets/IPv6-prefix-sets/prefix-set/name";
+       }
+          
+       description 
+          "reference to a prefix list to match the source address";
+    }
+    leaf destination-prefix-list {
+       type leafref { 
+          path "../../../../defined-sets/IPv6-prefix-sets/prefix-set/name";
+       }
+          
+       description 
+          "reference to a prefix list to match the destination address";
+    }
+    leaf protocol-set {
+       type leafref { 
+          path "../../../../defined-sets/protocol-sets/protocol-set/name";
+       }
+          
+       description 
+          "reference to a protocol set to match the protocol field";
     }
   }
 
@@ -791,6 +1069,59 @@ module ietf-acl-enh {
         "Indicates how to handle TCP flags.";
       uses tcp-flags;
     }
+    leaf source-port-set {
+       type leafref { 
+          path "../../../../defined-sets/port-sets/port-set/name";
+       }
+          
+       description 
+          "reference to a port set to match the source port";
+    }
+    leaf destination-port-set {
+       type leafref { 
+          path "../../../../defined-sets/port-sets/port-set/name";
+       }
+          
+       description 
+          "reference to a port set to match the destination port";
+    }
+  }
+  
+  augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
+        + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:udp" {
+    description 
+       "Match against port sets";
+    leaf source-port-set {
+       type leafref { 
+          path "../../../../defined-sets/port-sets/port-set/name";
+       }
+          
+       description 
+          "reference to a port set to match the source port";
+    }
+    leaf destination-port-set {
+       type leafref { 
+          path "../../../../defined-sets/port-sets/port-set/name";
+       }
+          
+       description 
+          "reference to a port set to match the destination port";
+    }
+  }
+  
+  augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
+        + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:icmp" {
+    description 
+       "Match against ICMP type sets";   
+    leaf icmp-set {
+       type leafref { 
+          path "../../../../defined-sets/icmp-type-sets/icmp-type-set/name";
+       }
+          
+       description 
+          "reference to a icmp type set to match the icmp type field";
+    }
+ 
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"

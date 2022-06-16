@@ -78,7 +78,7 @@ e.g., deny-lists or accept-lists that are associated with those provided by a
 
 
 Note that ACLs are used locally in devices but are triggered by other
-tools such as DDoS mitigation {{!RFC9132}} or BGP Flow Spec {{!RFC8955}}
+tools such as DDoS mitigation {{?RFC9132}} or BGP Flow Spec {{?RFC8955}}
 {{!RFC8956}}. Therefore, supporting means to easily map to the filtering rules conveyed in
 messages triggered by  hese tools is valuable from a network operation standpoint.
 

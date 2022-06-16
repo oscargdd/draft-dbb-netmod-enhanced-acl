@@ -90,19 +90,12 @@ document, are to be interpreted as described in {{!RFC2119}}.
 
 The terminology for describing YANG modules is defined in {{!RFC7950}}.
 The meaning of the symbols in the tree diagrams is defined in
-{{!RFC8340}}.
+{{?RFC8340}}.
 
 
 In adition to the terms defined in {{!RFC8519}}, this document makes use of the following terms:
 
 - Defined set: Refers to reusable description of one or multiple information elements (e.g., IP address, IP prefix, port number, ICMP type).
-
-# Approach
-
-This first version of the document does not include on purpose any YANG module. This is because the authors are seeking a work direction from the netmod WG whether the missing features can be accomplished by means of augmentations or whether an ACL-bis document is more appropriate.
-
-Future versions of the document will include a YANG module that will reflect the WG feedback. A network wide module, in adition to the device module, might be required. The decision on whether a single module is sufficient to handle both device and network levels or two separate ones will be based on WG feedback.
-
 
 # Problem Statement & Gap Analysis {#ps}
 
@@ -112,7 +105,7 @@ IP prefix related data nodes, e.g., "destination-ipv4-network"
 or "destination-ipv6-network", do not allow manipulating a list of IP
 prefixes, which may lead to manipulating large files. The same issue
 is encountered when ACLs have to be in place to mitigate DDoS
-attacks (e.g., {{!RFC9132}} when a set of sources are involved in such
+attacks (e.g., {{?RFC9132}} when a set of sources are involved in such
 an attack. The situation is even worse when both a list of sources
 and destination prefixes are involved.
 
@@ -268,7 +261,6 @@ A candidate structure is shown in {{example_sets}}:
      |  +--rw prefix-sets
      |  |  +--rw prefix-set* [name mode]
      |  |     +--rw name        string
-     |  |     +--rw mode        enumeration
      |  |     +--rw ip-prefix*   inet:ip-prefix
      |  +--rw port-sets
      |  |  +--rw port-set* [name]
@@ -620,7 +612,6 @@ Med
 
 ~~~ ascii-art
 <CODE BEGINS> file "ietf-acl-enh@2022-06-16.yang"
-
 module ietf-acl-enh {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-acl-enh";
@@ -1156,7 +1147,7 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 ## URI Registration
 
    This document requests IANA to register the following URI in the "ns"
-   subregistry within the "IETF XML Registry" {{!RFC3688}}:   
+   subregistry within the "IETF XML Registry" {{!RFC3688}}:
 ~~~
          URI: urn:ietf:params:xml:ns:yang:ietf-acl-enh
          Registrant Contact: The IESG.
@@ -1167,7 +1158,7 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 
 This document requests IANA to register the following YANG module in
    the "YANG Module Names" subregistry {{!RFC6020}} within the "YANG
-   Parameters" registry.   
+   Parameters" registry.
 ~~~
          name: ietf-acl-enh
          namespace: urn:ietf:params:xml:ns:yang:ietf-ietf-acl-enh
@@ -1178,6 +1169,6 @@ This document requests IANA to register the following YANG module in
 
 --- back
 
-# Acknowledgements 
+# Acknowledgements
 
 Many thanks to Jon Shallow and Miguel Cros for the discussion when preparing this document.

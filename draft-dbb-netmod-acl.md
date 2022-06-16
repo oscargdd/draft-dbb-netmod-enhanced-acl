@@ -1182,6 +1182,5 @@ This document requests IANA to register the following YANG module in
 --- back
 
 # Acknowledgements 
-{: numbered="no"}
 
 Many thanks to Jon Shallow and Miguel Cros for the discussion when preparing this document.

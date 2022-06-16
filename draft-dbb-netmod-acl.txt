@@ -64,31 +64,31 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-     1.1.  Terminology
-   2.  Problem Statement & Gap Analysis
-     2.1.  Suboptimal Configuration: Lack of Manipulating Lists of
+   2.  Terminology
+   3.  Problem Statement & Gap Analysis
+     3.1.  Suboptimal Configuration: Lack of Manipulating Lists of
            Prefixes
-     2.2.  Manageability: Impossibility to Use Aliases or Defined Sets
-     2.3.  Bind ACLs to Devices, Not Only Interfaces
-     2.4.  Partial or Lack of IPv4/IPv6 Fragment Handling
-     2.5.  Suboptimal TCP Flags Handling
-     2.6.  Rate-Limit Action
-     2.7.  Payload-based Filtering
-     2.8.  Reuse the ACLs Content Across Several Devices
-   3.  Overall Module Structure
-     3.1.  Enhanced ACL
-     3.2.  Defined sets
-     3.3.  Fragment Handling
-     3.4.  Rate limting action
-   4.  YANG Modules
+     3.2.  Manageability: Impossibility to Use Aliases or Defined Sets
+     3.3.  Bind ACLs to Devices, Not Only Interfaces
+     3.4.  Partial or Lack of IPv4/IPv6 Fragment Handling
+     3.5.  Suboptimal TCP Flags Handling
+     3.6.  Rate-Limit Action
+     3.7.  Payload-based Filtering
+     3.8.  Reuse the ACLs Content Across Several Devices
+   4.  Overall Module Structure
      4.1.  Enhanced ACL
-   5.  Security Considerations (TBC)
-   6.  IANA Considerations
-     6.1.  URI Registration
-     6.2.  YANG Module Name Registration
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+     4.2.  Defined sets
+     4.3.  Fragment Handling
+     4.4.  Rate limting action
+   5.  YANG Modules
+     5.1.  Enhanced ACL
+   6.  Security Considerations (TBC)
+   7.  IANA Considerations
+     7.1.  URI Registration
+     7.2.  YANG Module Name Registration
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Appendix A.  Acknowledgements
    Authors' Addresses
 
@@ -140,7 +140,7 @@ Table of Contents
    filtering rules conveyed in messages triggered by hese tools is
    valuable from a network operation standpoint.
 
-1.1.  Terminology
+2.  Terminology
 
    The keywords *MUST*, *MUST NOT*, *REQUIRED*, *SHALL*, *SHALL NOT*,
    *SHOULD*, *SHOULD NOT*, *RECOMMENDED*, *MAY*, and *OPTIONAL*, when
@@ -158,9 +158,9 @@ Table of Contents
       information elements (e.g., IP address, IP prefix, port number,
       ICMP type).
 
-2.  Problem Statement & Gap Analysis
+3.  Problem Statement & Gap Analysis
 
-2.1.  Suboptimal Configuration: Lack of Manipulating Lists of Prefixes
+3.1.  Suboptimal Configuration: Lack of Manipulating Lists of Prefixes
 
    IP prefix related data nodes, e.g., "destination-ipv4-network" or
    "destination-ipv6-network", do not allow manipulating a list of IP
@@ -305,7 +305,7 @@ Table of Contents
       Figure 2: Example Illustrating Optimal Use of the ACL Model in a
                               Network Context.
 
-2.2.  Manageability: Impossibility to Use Aliases or Defined Sets
+3.2.  Manageability: Impossibility to Use Aliases or Defined Sets
 
    The same approach as the one discussed for IP prefixes can be
    generalized by introduing the concept of "aliases" or "defined sets".
@@ -351,7 +351,7 @@ Table of Contents
 
                     Figure 3: Examples of Defined Sets.
 
-2.3.  Bind ACLs to Devices, Not Only Interfaces
+3.3.  Bind ACLs to Devices, Not Only Interfaces
 
    In the context of network management, an ACL may be enforced in many
    network locations.  As such, the ACL module should allow binding an
@@ -361,7 +361,7 @@ Table of Contents
    still the same name may be used in many devices when enforcing node-
    specific ACLs.
 
-2.4.  Partial or Lack of IPv4/IPv6 Fragment Handling
+3.4.  Partial or Lack of IPv4/IPv6 Fragment Handling
 
    [RFC8519] does not support fragment handling capability for IPv6 but
    offers a partial support for IPv4 by means of 'flags'.  Nevertheless,
@@ -495,7 +495,7 @@ Table of Contents
          Figure 5: Example Illustrating Canddiate Filtering of IPv6
                             Fragmented Packets.
 
-2.5.  Suboptimal TCP Flags Handling
+3.5.  Suboptimal TCP Flags Handling
 
    [RFC8519] allows including flags in the TCP match fields, however
    that strcuture does not support matching operations as those
@@ -533,7 +533,7 @@ Table of Contents
 
              Figure 6: Example to Deny TCP Null Attack Messages
 
-2.6.  Rate-Limit Action
+3.6.  Rate-Limit Action
 
    [RFC8519] specifies that forwarding actions can be 'accept' (i.e.,
    accept matching traffic), 'drop' (i.e., drop matching traffic without
@@ -573,7 +573,7 @@ Table of Contents
 
                Figure 7: Example Rate-Limit Incoming TCP SYNs
 
-2.7.  Payload-based Filtering
+3.7.  Payload-based Filtering
 
    Some transport protocols use existing protocols (e.g., TCP or UDP) as
    substrate.  The match criteria for such protocols may rely upon the
@@ -584,7 +584,7 @@ Table of Contents
    Likewise, the current version of the ACL model does not support
    filetering of encapsulated traffic.
 
-2.8.  Reuse the ACLs Content Across Several Devices
+3.8.  Reuse the ACLs Content Across Several Devices
 
    Having a global network view of the ACLs is highly valuable for
    service providers.  An ACL could be defined and applied following the
@@ -609,9 +609,9 @@ Table of Contents
       or a virtual node.  ACLs can be applied in physical and logical
       infrastructure.
 
-3.  Overall Module Structure
+4.  Overall Module Structure
 
-3.1.  Enhanced ACL
+4.1.  Enhanced ACL
 
    module: ietf-acl-enh
 
@@ -697,22 +697,22 @@ Table of Contents
 
                         Figure 8: Enhanced ACL tree
 
-3.2.  Defined sets
+4.2.  Defined sets
 
    Oscar Brief explanation on the different sets that can be managed and
    used in matches
 
-3.3.  Fragment Handling
+4.3.  Fragment Handling
 
    Med Brief explanation of the fragment handling
 
-3.4.  Rate limting action
+4.4.  Rate limting action
 
    Med
 
-4.  YANG Modules
+5.  YANG Modules
 
-4.1.  Enhanced ACL
+5.1.  Enhanced ACL
 
    <CODE BEGINS> file "ietf-acl-enh@2022-06-16.yang"
    module ietf-acl-enh {
@@ -1224,7 +1224,7 @@ Table of Contents
 
                                   Figure 9
 
-5.  Security Considerations (TBC)
+6.  Security Considerations (TBC)
 
    The YANG modules specified in this document define a schema for data
    that is designed to be accessed via network management protocol such
@@ -1257,16 +1257,16 @@ Table of Contents
 
    *  TBC
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  URI Registration
+7.1.  URI Registration
 
    This document requests IANA to register the following URI in the "ns"
    subregistry within the "IETF XML Registry" [RFC3688]: ~~~ URI:
    urn:ietf:params:xml:ns:yang:ietf-acl-enh Registrant Contact: The
    IESG.  XML: N/A; the requested URI is an XML namespace. ~~~
 
-6.2.  YANG Module Name Registration
+7.2.  YANG Module Name Registration
 
    This document requests IANA to register the following YANG module in
    the "YANG Module Names" subregistry [RFC6020] within the "YANG
@@ -1274,9 +1274,9 @@ Table of Contents
    urn:ietf:params:xml:ns:yang:ietf-ietf-acl-enh maintained by IANA: N
    prefix: enh-acl reference: RFC XXXX ~~~
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -1339,7 +1339,7 @@ Table of Contents
               DOI 10.17487/RFC9132, September 2021,
               <https://www.rfc-editor.org/rfc/rfc9132>.
 
-7.2.  Informative References
+8.2.  Informative References
 
    [RFC8340]  Bjorklund, M. and L. Berger, Ed., "YANG Tree Diagrams",
               BCP 215, RFC 8340, DOI 10.17487/RFC8340, March 2018,

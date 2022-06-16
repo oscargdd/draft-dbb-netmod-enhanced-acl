@@ -664,7 +664,7 @@ module ietf-acl-enh {
 
      Redistribution and use in source and binary forms, with or
      without modification, is permitted pursuant to, and subject
-     to the license terms contained in, the Simplified BSD License
+     to the license terms contained in, the Revised BSD License
      set forth in Section 4.c of the IETF Trust's Legal Provisions
      Relating to IETF Documents
      (http://trustee.ietf.org/license-info).
@@ -1126,7 +1126,6 @@ module ietf-acl-enh {
     }
   }
 }
-
 <CODE ENDS>
 ~~~
 {: #enh-acl-module}
@@ -1157,8 +1156,7 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 ## URI Registration
 
    This document requests IANA to register the following URI in the "ns"
-   subregistry within the "IETF XML Registry" {{!RFC3688}}:
-   
+   subregistry within the "IETF XML Registry" {{!RFC3688}}:   
 ~~~
          URI: urn:ietf:params:xml:ns:yang:ietf-acl-enh
          Registrant Contact: The IESG.
@@ -1169,8 +1167,7 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 
 This document requests IANA to register the following YANG module in
    the "YANG Module Names" subregistry {{!RFC6020}} within the "YANG
-   Parameters" registry.
-   
+   Parameters" registry.   
 ~~~
          name: ietf-acl-enh
          namespace: urn:ietf:params:xml:ns:yang:ietf-ietf-acl-enh

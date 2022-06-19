@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-06-16T01:15:52.218117+00:00",
+  "timestamp": "2022-06-19T01:19:12.090701+00:00",
   "repo": "oscargdd/draft-dbb-netmod-enhanced-acl",
   "labels": [
     {
@@ -75,6 +75,34 @@
       "mergedBy": "oscargdd",
       "mergeCommit": {
         "oid": "b5da3d02e817d32e64e4c241bb5698b45bdf0093"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOHQVDBc45xHaj",
+      "title": "Update IANA section + Module",
+      "url": "https://github.com/oscargdd/draft-dbb-netmod-enhanced-acl/pull/2",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-06-16T10:50:10Z",
+      "updatedAt": "2022-06-16T11:55:29Z",
+      "baseRepository": "oscargdd/draft-dbb-netmod-enhanced-acl",
+      "baseRefName": "main",
+      "baseRefOid": "b17b98d3597d8a4e6cf83417642f2f4cb7ceb9e3",
+      "headRepository": "boucadair/draft-dbb-netmod-enhanced-acl",
+      "headRefName": "patch-2",
+      "headRefOid": "80685ebeab9e8100832a2e169542f9a9d97ac075",
+      "closedAt": "2022-06-16T11:55:29Z",
+      "mergedAt": "2022-06-16T11:55:29Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "2adb465a9c0d21efe5debacaf60b3c72e9986347"
       },
       "comments": [],
       "reviews": []

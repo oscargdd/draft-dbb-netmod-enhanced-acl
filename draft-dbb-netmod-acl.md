@@ -299,7 +299,7 @@ Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to ef
 
 ## Suboptimal TCP Flags Handling {#ps-flags}
 
-{{!RFC8519}} allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules. 
+{{!RFC8519}} allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules.
 
 ## Rate-Limit Action {#ps-rate}
 

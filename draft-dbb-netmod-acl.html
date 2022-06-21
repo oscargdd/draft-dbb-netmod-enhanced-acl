@@ -1034,7 +1034,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Dios, et al.</td>
-<td class="center">Expires 18 December 2022</td>
+<td class="center">Expires 23 December 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1047,12 +1047,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dbb-netmod-acl-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-06-16" class="published">16 June 2022</time>
+<time datetime="2022-06-21" class="published">21 June 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-12-18">18 December 2022</time></dd>
+<dd class="expires"><time datetime="2022-12-23">23 December 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,7 +1107,7 @@ the limitations of the ACL model as initially defined in RFC 8519.<a href="#sect
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1181,10 +1181,13 @@ the limitations of the ACL model as initially defined in RFC 8519.<a href="#sect
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-defined-sets" class="xref">Defined sets</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-fragment-handling" class="xref">Fragment Handling</a></p>
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-tcp-flags-handling" class="xref">TCP Flags Handling</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
-                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-rate-limting-action" class="xref">Rate limting action</a></p>
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-fragments-handling" class="xref">Fragments Handling</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-rate-limit-traffic" class="xref">Rate-Limit Traffic</a></p>
 </li>
             </ul>
 </li>
@@ -1295,7 +1298,7 @@ The meaning of the symbols in the tree diagrams is defined in
       <h2 id="name-problem-statement-gap-analy">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-problem-statement-gap-analy" class="section-name selfRef">Problem Statement &amp; Gap Analysis</a>
       </h2>
-<div id="suboptimal-configuration-lack-of-manipulating-lists-of-prefixes">
+<div id="ps-sets">
 <section id="section-3.1">
         <h3 id="name-suboptimal-configuration-la">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-suboptimal-configuration-la" class="section-name selfRef">Suboptimal Configuration: Lack of Manipulating Lists of Prefixes</a>
@@ -1509,7 +1512,7 @@ and destination prefixes are involved.<a href="#section-3.1-1" class="pilcrow">�
 <p id="section-3.3-2">The ACL name must, thus, be unique at the scale of the network, but still the same name may be used in many devices when enforcing node-specific ACLs.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="partial-or-lack-of-ipv4ipv6-fragment-handling">
+<div id="ps-frag">
 <section id="section-3.4">
         <h3 id="name-partial-or-lack-of-ipv4-ipv">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-partial-or-lack-of-ipv4-ipv" class="section-name selfRef">Partial or Lack of IPv4/IPv6 Fragment Handling</a>
@@ -1521,221 +1524,27 @@ to be defined.  For example, setting other bits not covered by the
 'flags' filtering clause in a packet will allow that packet to get
 through (because it won't match the ACE).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to efficiently handle fragment-related filtering rules. Some examples to illustrate how 'fragment' can be used are provided below.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
-<p id="section-3.4-3"><a href="#example_2" class="xref">Figure 4</a> shows the content of a candidate POST request to allow the traffic destined to 198.51.100.0/24 and UDP port number 53, but to drop all fragmented
-packets.  The following ACEs are defined (in this order):<a href="#section-3.4-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.4-4.1">"drop-all-fragments" ACE: discards all fragments.<a href="#section-3.4-4.1" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-3.4-4.2">"allow-dns-packets" ACE: accepts DNS packets destined to 198.51.100.0/24.<a href="#section-3.4-4.2" class="pilcrow">¶</a>
-</li>
-        </ul>
-<span id="name-example-illustrating-canddi"></span><div id="example_2">
-<figure id="figure-4">
-          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.4-5.1">
-<pre>
-{
-     "ietf-access-control-list:acls": {
-       "acl": [
-         {
-           "name": "dns-fragments",
-           "type": "ipv4-acl-type",
-           "aces": {
-             "ace": [
-               {
-                 "name": "drop-all-fragments",
-                 "matches": {
-                   "ipv4": {
-                     "fragment": {
-                       "operator": "match",
-                       "type": "isf"
-                     }
-                   }
-                 },
-                 "actions": {
-                   "forwarding": "drop"
-                 }
-               },
-               {
-                 "name": "allow-dns-packets",
-                 "matches": {
-                   "ipv4": {
-                     "destination-ipv4-network": "198.51.100.0/24"
-                   },
-                   "udp": {
-                     "destination-port": {
-                       "operator": "eq",
-                       "port": 53
-                     }
-                   },
-                   "actions": {
-                     "forwarding": "accept"
-                   }
-                 }
-               }
-             ]
-           }
-         }
-       ]
-     }
-   }
-</pre>
-</div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-example-illustrating-canddi" class="selfRef">Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets.</a>
-          </figcaption></figure>
-</div>
-<p id="section-3.4-6"><a href="#example_3" class="xref">Figure 5</a> shows an example of the body of a candidate POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):<a href="#section-3.4-6" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.4-7.1">"drop-all-fragments" ACE: discards all fragments (including atomic fragments). That is, IPv6 packets that include a Fragment header (44) are dropped.<a href="#section-3.4-7.1" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-3.4-7.2">"allow-dns-packets" ACE: accepts DNS packets destined to 2001:db8::/32.<a href="#section-3.4-7.2" class="pilcrow">¶</a>
-</li>
-        </ul>
-<span id="name-example-illustrating-canddia"></span><div id="example_3">
-<figure id="figure-5">
-          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.4-8.1">
-<pre>
-    {
-     "ietf-access-control-list:acls": {
-       "acl": [
-         {
-           "name": "dns-fragments",
-           "type": "ipv6-acl-type",
-           "aces": {
-             "ace": [
-               {
-                 "name": "drop-all-fragments",
-                 "matches": {
-                   "ipv6": {
-                     "fragment": {
-                       "operator": "match",
-                       "type": "isf"
-                     }
-                   }
-                 },
-                 "actions": {
-                   "forwarding": "drop"
-                 }
-               },
-               {
-                 "name": "allow-dns-packets",
-                 "matches": {
-                   "ipv6": {
-                     "destination-ipv6-network": "2001:db8::/32"
-                   },
-                   "udp": {
-                     "destination-port": {
-                       "operator": "eq",
-                       "port": 53
-                     }
-                   }
-                 },
-                 "actions": {
-                   "forwarding": "accept"
-                 }
-               }
-             ]
-           }
-         }
-       ]
-     }
-   }
-</pre>
-</div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-example-illustrating-canddia" class="selfRef">Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets.</a>
-          </figcaption></figure>
-</div>
 </section>
 </div>
-<div id="suboptimal-tcp-flags-handling">
+<div id="ps-flags">
 <section id="section-3.5">
         <h3 id="name-suboptimal-tcp-flags-handli">
 <a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-suboptimal-tcp-flags-handli" class="section-name selfRef">Suboptimal TCP Flags Handling</a>
         </h3>
-<p id="section-3.5-1"><span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules. Some examples to illustrate the use of such field are discussed below.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.5-2"><a href="#example_4" class="xref">Figure 6</a> shows an example of a candidate request to install a filter to discard incoming TCP messages having all flags unset.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
-<span id="name-example-to-deny-tcp-null-at"></span><div id="example_4">
-<figure id="figure-6">
-          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.5-3.1">
-<pre>
-  {
-     "ietf-access-control-list:acls": {
-       "acl": [{
-         "name": "tcp-flags-example",
-         "aces": {
-           "ace": [{
-             "name": "null-attack",
-             "matches": {
-               "tcp": {
-                 "flags-bitmask": {
-                   "operator": "not any",
-                   "bitmask": 4095
-                 }
-               }
-             },
-             "actions": {
-               "forwarding": "drop"
-             }
-           }]
-         }
-       }]
-     }
-   }
-</pre>
-</div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
-<a href="#name-example-to-deny-tcp-null-at" class="selfRef">Example to Deny TCP Null Attack Messages</a>
-          </figcaption></figure>
-</div>
+<p id="section-3.5-1"><span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="rate-limit-action">
+<div id="ps-rate">
 <section id="section-3.6">
         <h3 id="name-rate-limit-action">
 <a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-rate-limit-action" class="section-name selfRef">Rate-Limit Action</a>
         </h3>
 <p id="section-3.6-1"><span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span> specifies that forwarding actions can be 'accept' (i.e., accept matching
    traffic), 'drop' (i.e., drop matching traffic without sending any
-   ICMP error message), or 'reejct' (i.e., drop matching traffic and send an ICMP error message to the source). Howover, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by the ACL model.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
-<p id="section-3.6-2">(#example_5) shows a candidate ACL example to rate-limit incoming SYNs during a SYN flood attack.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
-<span id="name-example-rate-limit-incoming"></span><div id="example_5">
-<figure id="figure-7">
-          <div class="alignLeft art-ascii-art art-text artwork" id="section-3.6-3.1">
-<pre>
-  {
-     "ietf-access-control-list:acls": {
-       "acl": [{
-         "name": "tcp-flags-example-with-rate-limit",
-         "aces": {
-           "ace": [{
-             "name": "rate-limit-syn",
-             "matches": {
-               "tcp": {
-                 "flags-bitmask": {
-                   "operator": "match",
-                   "bitmask": 2
-                 }
-               }
-             },
-             "actions": {
-               "forwarding": "accept",
-               "rate-limit": "20.00"
-             }
-           }]
-         }
-       }]
-     }
-   }
-</pre>
-</div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
-<a href="#name-example-rate-limit-incoming" class="selfRef">Example Rate-Limit Incoming TCP SYNs</a>
-          </figcaption></figure>
-</div>
+   ICMP error message), or 'reject' (i.e., drop matching traffic and send an ICMP error message to the source). Howover, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by <span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span>.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="payload-based-filtering">
+<div id="ps-pf">
 <section id="section-3.7">
         <h3 id="name-payload-based-filtering">
 <a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-payload-based-filtering" class="section-name selfRef">Payload-based Filtering</a>
@@ -1784,19 +1593,19 @@ logical infrastructure.<a href="#section-3.8-3.4" class="pilcrow">¶</a>
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-enhanced-acl" class="section-name selfRef">Enhanced ACL</a>
         </h3>
 <span id="name-enhanced-acl-tree"></span><div id="enh-acl-tree">
-<figure id="figure-8">
+<figure id="figure-4">
           <div class="alignLeft art-ascii-art art-text artwork" id="section-4.1-1.1">
 <pre>
 module: ietf-acl-enh
 
   augment /ietf-acl:acls/ietf-acl:acl:
     +--rw defined-sets
-       +--rw IPv4-prefix-sets
+       +--rw ipv4-prefix-sets
        |  +--rw prefix-set* [name]
        |     +--rw name           string
        |     +--rw description?   string
        |     +--rw prefix*        inet:ipv4-prefix
-       +--rw IPv6-prefix-sets
+       +--rw ipv6-prefix-sets
        |  +--rw prefix-set* [name]
        |     +--rw name           string
        |     +--rw description?   string
@@ -1870,7 +1679,7 @@ module: ietf-acl-enh
     +--rw rate-limit?   decimal64
 </pre>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-enhanced-acl-tree" class="selfRef">Enhanced ACL tree</a>
           </figcaption></figure>
 </div>
@@ -1884,20 +1693,224 @@ module: ietf-acl-enh
 <p id="section-4.2-1">Oscar Brief explanation on the different sets that can be managed and used in matches<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="fragment-handling">
+<div id="tcp-flags-handling">
 <section id="section-4.3">
-        <h3 id="name-fragment-handling">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-fragment-handling" class="section-name selfRef">Fragment Handling</a>
+        <h3 id="name-tcp-flags-handling">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-tcp-flags-handling" class="section-name selfRef">TCP Flags Handling</a>
         </h3>
-<p id="section-4.3-1">Med Brief explanation of the fragment handling<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">The augmented ACL structure includes a new leaf 'flags-bitmask' to better handle flags.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">Clients that support both 'flags-bitmask' and 'flags' matching fields MUST NOT set these fields in the same request.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3"><a href="#example_4" class="xref">Figure 5</a> shows an example of a request to install a filter to discard incoming TCP messages having all flags unset.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<span id="name-example-to-deny-tcp-null-at"></span><div id="example_4">
+<figure id="figure-5">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-4.3-4.1">
+<pre>
+  {
+     "ietf-access-control-list:acls": {
+       "acl": [{
+         "name": "tcp-flags-example",
+         "aces": {
+           "ace": [{
+             "name": "null-attack",
+             "matches": {
+               "tcp": {
+                 "flags-bitmask": {
+                   "operator": "not any",
+                   "bitmask": 4095
+                 }
+               }
+             },
+             "actions": {
+               "forwarding": "drop"
+             }
+           }]
+         }
+       }]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<a href="#name-example-to-deny-tcp-null-at" class="selfRef">Example to Deny TCP Null Attack Messages</a>
+          </figcaption></figure>
+</div>
 </section>
 </div>
-<div id="rate-limting-action">
+<div id="fragments-handling">
 <section id="section-4.4">
-        <h3 id="name-rate-limting-action">
-<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-rate-limting-action" class="section-name selfRef">Rate limting action</a>
+        <h3 id="name-fragments-handling">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-fragments-handling" class="section-name selfRef">Fragments Handling</a>
         </h3>
-<p id="section-4.4-1">Med<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-1">The augmented ACL structure includes a new leaf 'fragment' to better handle fragments.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Clients that support both 'fragment' and 'flags' matching fields MUST NOT set these fields in the same request.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-3"><a href="#example_2" class="xref">Figure 6</a> shows the content of a POST request to allow the traffic destined to 198.51.100.0/24 and UDP port number 53, but to drop all fragmented
+packets.  The following ACEs are defined (in this order):<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.4-4.1">"drop-all-fragments" ACE: discards all fragments.<a href="#section-4.4-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.4-4.2">"allow-dns-packets" ACE: accepts DNS packets destined to 198.51.100.0/24.<a href="#section-4.4-4.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<span id="name-example-illustrating-canddi"></span><div id="example_2">
+<figure id="figure-6">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-4.4-5.1">
+<pre>
+{
+     "ietf-access-control-list:acls": {
+       "acl": [
+         {
+           "name": "dns-fragments",
+           "type": "ipv4-acl-type",
+           "aces": {
+             "ace": [
+               {
+                 "name": "drop-all-fragments",
+                 "matches": {
+                   "ipv4": {
+                     "fragment": {
+                       "operator": "match",
+                       "type": "isf"
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "drop"
+                 }
+               },
+               {
+                 "name": "allow-dns-packets",
+                 "matches": {
+                   "ipv4": {
+                     "destination-ipv4-network": "198.51.100.0/24"
+                   },
+                   "udp": {
+                     "destination-port": {
+                       "operator": "eq",
+                       "port": 53
+                     }
+                   },
+                   "actions": {
+                     "forwarding": "accept"
+                   }
+                 }
+               }
+             ]
+           }
+         }
+       ]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<a href="#name-example-illustrating-canddi" class="selfRef">Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets.</a>
+          </figcaption></figure>
+</div>
+<p id="section-4.4-6"><a href="#example_3" class="xref">Figure 7</a> shows an example of the body of a POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):<a href="#section-4.4-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.4-7.1">"drop-all-fragments" ACE: discards all fragments (including atomic fragments). That is, IPv6 packets that include a Fragment header (44) are dropped.<a href="#section-4.4-7.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.4-7.2">"allow-dns-packets" ACE: accepts DNS packets destined to 2001:db8::/32.<a href="#section-4.4-7.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<span id="name-example-illustrating-canddia"></span><div id="example_3">
+<figure id="figure-7">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-4.4-8.1">
+<pre>
+    {
+     "ietf-access-control-list:acls": {
+       "acl": [
+         {
+           "name": "dns-fragments",
+           "type": "ipv6-acl-type",
+           "aces": {
+             "ace": [
+               {
+                 "name": "drop-all-fragments",
+                 "matches": {
+                   "ipv6": {
+                     "fragment": {
+                       "operator": "match",
+                       "type": "isf"
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "drop"
+                 }
+               },
+               {
+                 "name": "allow-dns-packets",
+                 "matches": {
+                   "ipv6": {
+                     "destination-ipv6-network": "2001:db8::/32"
+                   },
+                   "udp": {
+                     "destination-port": {
+                       "operator": "eq",
+                       "port": 53
+                     }
+                   }
+                 },
+                 "actions": {
+                   "forwarding": "accept"
+                 }
+               }
+             ]
+           }
+         }
+       ]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<a href="#name-example-illustrating-canddia" class="selfRef">Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets.</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="rate-limit-traffic">
+<section id="section-4.5">
+        <h3 id="name-rate-limit-traffic">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-rate-limit-traffic" class="section-name selfRef">Rate-Limit Traffic</a>
+        </h3>
+<p id="section-4.5-1">In order to support rate-limiting (see <a href="#ps-rate" class="xref">Section 3.6</a>), a new action called "rate-limit" is defined.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+<p id="section-4.5-2">(#example_5) shows an ACL example to rate-limit incoming SYNs during a SYN flood attack.<a href="#section-4.5-2" class="pilcrow">¶</a></p>
+<span id="name-example-rate-limit-incoming"></span><div id="example_5">
+<figure id="figure-8">
+          <div class="alignLeft art-ascii-art art-text artwork" id="section-4.5-3.1">
+<pre>
+  {
+     "ietf-access-control-list:acls": {
+       "acl": [{
+         "name": "tcp-flags-example-with-rate-limit",
+         "aces": {
+           "ace": [{
+             "name": "rate-limit-syn",
+             "matches": {
+               "tcp": {
+                 "flags-bitmask": {
+                   "operator": "match",
+                   "bitmask": 2
+                 }
+               }
+             },
+             "actions": {
+               "forwarding": "accept",
+               "rate-limit": "20.00"
+             }
+           }]
+         }
+       }]
+     }
+   }
+</pre>
+</div>
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<a href="#name-example-rate-limit-incoming" class="selfRef">Example Rate-Limit Incoming TCP SYNs</a>
+          </figcaption></figure>
+</div>
 </section>
 </div>
 </section>
@@ -2468,11 +2481,11 @@ module ietf-acl-enh {
         </h3>
 <p id="section-7.1-1">This document requests IANA to register the following URI in the "ns"
    subregistry within the "IETF XML Registry" <span>[<a href="#RFC3688" class="xref">RFC3688</a>]</span>:
-~~~
+~~~~~~~~~~~
          URI: urn:ietf:params:xml:ns:yang:ietf-acl-enh
          Registrant Contact: The IESG.
          XML: N/A; the requested URI is an XML namespace.
-~~~<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+~~~~~~~~~~~<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="yang-module-name-registration">
@@ -2483,13 +2496,13 @@ module ietf-acl-enh {
 <p id="section-7.2-1">This document requests IANA to register the following YANG module in
    the "YANG Module Names" subregistry <span>[<a href="#RFC6020" class="xref">RFC6020</a>]</span> within the "YANG
    Parameters" registry.
-~~~
+~~~~~~~~~~~
          name: ietf-acl-enh
          namespace: urn:ietf:params:xml:ns:yang:ietf-ietf-acl-enh
          maintained by IANA: N
          prefix: enh-acl
          reference: RFC XXXX
-~~~<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+~~~~~~~~~~~<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

@@ -5,9 +5,9 @@
 netmod                                                     O. G. D. Dios
 Internet-Draft                                                S. Barguil
 Intended status: Standards Track                              Telefonica
-Expires: 18 December 2022                                   M. Boucadair
+Expires: 23 December 2022                                   M. Boucadair
                                                                   Orange
-                                                            16 June 2022
+                                                            21 June 2022
 
 
         Extensions to the Access Control Lists (ACLs) YANG Model
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 December 2022.
+   This Internet-Draft will expire on 23 December 2022.
 
 Copyright Notice
 
@@ -78,8 +78,9 @@ Table of Contents
    4.  Overall Module Structure
      4.1.  Enhanced ACL
      4.2.  Defined sets
-     4.3.  Fragment Handling
-     4.4.  Rate limting action
+     4.3.  TCP Flags Handling
+     4.4.  Fragments Handling
+     4.5.  Rate-Limit Traffic
    5.  YANG Modules
      5.1.  Enhanced ACL
    6.  Security Considerations (TBC)
@@ -375,203 +376,23 @@ Table of Contents
    Some examples to illustrate how 'fragment' can be used are provided
    below.
 
-   Figure 4 shows the content of a candidate POST request to allow the
-   traffic destined to 198.51.100.0/24 and UDP port number 53, but to
-   drop all fragmented packets.  The following ACEs are defined (in this
-   order):
-
-   *  "drop-all-fragments" ACE: discards all fragments.
-
-   *  "allow-dns-packets" ACE: accepts DNS packets destined to
-      198.51.100.0/24.
-
-   {
-        "ietf-access-control-list:acls": {
-          "acl": [
-            {
-              "name": "dns-fragments",
-              "type": "ipv4-acl-type",
-              "aces": {
-                "ace": [
-                  {
-                    "name": "drop-all-fragments",
-                    "matches": {
-                      "ipv4": {
-                        "fragment": {
-                          "operator": "match",
-                          "type": "isf"
-                        }
-                      }
-                    },
-                    "actions": {
-                      "forwarding": "drop"
-                    }
-                  },
-                  {
-                    "name": "allow-dns-packets",
-                    "matches": {
-                      "ipv4": {
-                        "destination-ipv4-network": "198.51.100.0/24"
-                      },
-                      "udp": {
-                        "destination-port": {
-                          "operator": "eq",
-                          "port": 53
-                        }
-                      },
-                      "actions": {
-                        "forwarding": "accept"
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-
-         Figure 4: Example Illustrating Canddiate Filtering of IPv4
-                            Fragmented Packets.
-
-   Figure 5 shows an example of the body of a candidate POST request to
-   allow the traffic destined to 2001:db8::/32 and UDP port number 53,
-   but to drop all fragmented packets.  The following ACEs are defined
-   (in this order):
-
-   *  "drop-all-fragments" ACE: discards all fragments (including atomic
-      fragments).  That is, IPv6 packets that include a Fragment header
-      (44) are dropped.
-
-   *  "allow-dns-packets" ACE: accepts DNS packets destined to
-      2001:db8::/32.
-
-       {
-        "ietf-access-control-list:acls": {
-          "acl": [
-            {
-              "name": "dns-fragments",
-              "type": "ipv6-acl-type",
-              "aces": {
-                "ace": [
-                  {
-                    "name": "drop-all-fragments",
-                    "matches": {
-                      "ipv6": {
-                        "fragment": {
-                          "operator": "match",
-                          "type": "isf"
-                        }
-                      }
-                    },
-                    "actions": {
-                      "forwarding": "drop"
-                    }
-                  },
-                  {
-                    "name": "allow-dns-packets",
-                    "matches": {
-                      "ipv6": {
-                        "destination-ipv6-network": "2001:db8::/32"
-                      },
-                      "udp": {
-                        "destination-port": {
-                          "operator": "eq",
-                          "port": 53
-                        }
-                      }
-                    },
-                    "actions": {
-                      "forwarding": "accept"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-
-         Figure 5: Example Illustrating Canddiate Filtering of IPv6
-                            Fragmented Packets.
-
 3.5.  Suboptimal TCP Flags Handling
 
    [RFC8519] allows including flags in the TCP match fields, however
    that strcuture does not support matching operations as those
    supported in BGP Flow Spec.  Definig this field to be defined as a
    flag bitmask together with a set of operations is meant to
-   efficiently handle TCP flags filtering rules.  Some examples to
-   illustrate the use of such field are discussed below.
-
-   Figure 6 shows an example of a candidate request to install a filter
-   to discard incoming TCP messages having all flags unset.
-
-     {
-        "ietf-access-control-list:acls": {
-          "acl": [{
-            "name": "tcp-flags-example",
-            "aces": {
-              "ace": [{
-                "name": "null-attack",
-                "matches": {
-                  "tcp": {
-                    "flags-bitmask": {
-                      "operator": "not any",
-                      "bitmask": 4095
-                    }
-                  }
-                },
-                "actions": {
-                  "forwarding": "drop"
-                }
-              }]
-            }
-          }]
-        }
-      }
-
-             Figure 6: Example to Deny TCP Null Attack Messages
+   efficiently handle TCP flags filtering rules.
 
 3.6.  Rate-Limit Action
 
    [RFC8519] specifies that forwarding actions can be 'accept' (i.e.,
    accept matching traffic), 'drop' (i.e., drop matching traffic without
-   sending any ICMP error message), or 'reejct' (i.e., drop matching
+   sending any ICMP error message), or 'reject' (i.e., drop matching
    traffic and send an ICMP error message to the source).  Howover,
    there are situations where the matching traffic can be accepted, but
    with a rate-limit policy.  Such capability is not currently supported
-   by the ACL model.
-
-   (#example_5) shows a candidate ACL example to rate-limit incoming
-   SYNs during a SYN flood attack.
-
-     {
-        "ietf-access-control-list:acls": {
-          "acl": [{
-            "name": "tcp-flags-example-with-rate-limit",
-            "aces": {
-              "ace": [{
-                "name": "rate-limit-syn",
-                "matches": {
-                  "tcp": {
-                    "flags-bitmask": {
-                      "operator": "match",
-                      "bitmask": 2
-                    }
-                  }
-                },
-                "actions": {
-                  "forwarding": "accept",
-                  "rate-limit": "20.00"
-                }
-              }]
-            }
-          }]
-        }
-      }
-
-               Figure 7: Example Rate-Limit Incoming TCP SYNs
+   by [RFC8519].
 
 3.7.  Payload-based Filtering
 
@@ -617,12 +438,12 @@ Table of Contents
 
      augment /ietf-acl:acls/ietf-acl:acl:
        +--rw defined-sets
-          +--rw IPv4-prefix-sets
+          +--rw ipv4-prefix-sets
           |  +--rw prefix-set* [name]
           |     +--rw name           string
           |     +--rw description?   string
           |     +--rw prefix*        inet:ipv4-prefix
-          +--rw IPv6-prefix-sets
+          +--rw ipv6-prefix-sets
           |  +--rw prefix-set* [name]
           |     +--rw name           string
           |     +--rw description?   string
@@ -695,20 +516,211 @@ Table of Contents
                /ietf-acl:actions:
        +--rw rate-limit?   decimal64
 
-                        Figure 8: Enhanced ACL tree
+                        Figure 4: Enhanced ACL tree
 
 4.2.  Defined sets
 
    Oscar Brief explanation on the different sets that can be managed and
    used in matches
 
-4.3.  Fragment Handling
+4.3.  TCP Flags Handling
 
-   Med Brief explanation of the fragment handling
+   The augmented ACL structure includes a new leaf 'flags-bitmask' to
+   better handle flags.
 
-4.4.  Rate limting action
+   Clients that support both 'flags-bitmask' and 'flags' matching fields
+   MUST NOT set these fields in the same request.
 
-   Med
+   Figure 5 shows an example of a request to install a filter to discard
+   incoming TCP messages having all flags unset.
+
+     {
+        "ietf-access-control-list:acls": {
+          "acl": [{
+            "name": "tcp-flags-example",
+            "aces": {
+              "ace": [{
+                "name": "null-attack",
+                "matches": {
+                  "tcp": {
+                    "flags-bitmask": {
+                      "operator": "not any",
+                      "bitmask": 4095
+                    }
+                  }
+                },
+                "actions": {
+                  "forwarding": "drop"
+                }
+              }]
+            }
+          }]
+        }
+      }
+
+             Figure 5: Example to Deny TCP Null Attack Messages
+
+4.4.  Fragments Handling
+
+   The augmented ACL structure includes a new leaf 'fragment' to better
+   handle fragments.
+
+   Clients that support both 'fragment' and 'flags' matching fields MUST
+   NOT set these fields in the same request.
+
+   Figure 6 shows the content of a POST request to allow the traffic
+   destined to 198.51.100.0/24 and UDP port number 53, but to drop all
+   fragmented packets.  The following ACEs are defined (in this order):
+
+   *  "drop-all-fragments" ACE: discards all fragments.
+
+   *  "allow-dns-packets" ACE: accepts DNS packets destined to
+      198.51.100.0/24.
+
+   {
+        "ietf-access-control-list:acls": {
+          "acl": [
+            {
+              "name": "dns-fragments",
+              "type": "ipv4-acl-type",
+              "aces": {
+                "ace": [
+                  {
+                    "name": "drop-all-fragments",
+                    "matches": {
+                      "ipv4": {
+                        "fragment": {
+                          "operator": "match",
+                          "type": "isf"
+                        }
+                      }
+                    },
+                    "actions": {
+                      "forwarding": "drop"
+                    }
+                  },
+                  {
+                    "name": "allow-dns-packets",
+                    "matches": {
+                      "ipv4": {
+                        "destination-ipv4-network": "198.51.100.0/24"
+                      },
+                      "udp": {
+                        "destination-port": {
+                          "operator": "eq",
+                          "port": 53
+                        }
+                      },
+                      "actions": {
+                        "forwarding": "accept"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+         Figure 6: Example Illustrating Canddiate Filtering of IPv4
+                            Fragmented Packets.
+
+   Figure 7 shows an example of the body of a POST request to allow the
+   traffic destined to 2001:db8::/32 and UDP port number 53, but to drop
+   all fragmented packets.  The following ACEs are defined (in this
+   order):
+
+   *  "drop-all-fragments" ACE: discards all fragments (including atomic
+      fragments).  That is, IPv6 packets that include a Fragment header
+      (44) are dropped.
+
+   *  "allow-dns-packets" ACE: accepts DNS packets destined to
+      2001:db8::/32.
+
+       {
+        "ietf-access-control-list:acls": {
+          "acl": [
+            {
+              "name": "dns-fragments",
+              "type": "ipv6-acl-type",
+              "aces": {
+                "ace": [
+                  {
+                    "name": "drop-all-fragments",
+                    "matches": {
+                      "ipv6": {
+                        "fragment": {
+                          "operator": "match",
+                          "type": "isf"
+                        }
+                      }
+                    },
+                    "actions": {
+                      "forwarding": "drop"
+                    }
+                  },
+                  {
+                    "name": "allow-dns-packets",
+                    "matches": {
+                      "ipv6": {
+                        "destination-ipv6-network": "2001:db8::/32"
+                      },
+                      "udp": {
+                        "destination-port": {
+                          "operator": "eq",
+                          "port": 53
+                        }
+                      }
+                    },
+                    "actions": {
+                      "forwarding": "accept"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+         Figure 7: Example Illustrating Canddiate Filtering of IPv6
+                            Fragmented Packets.
+
+4.5.  Rate-Limit Traffic
+
+   In order to support rate-limiting (see Section 3.6), a new action
+   called "rate-limit" is defined.
+
+   (#example_5) shows an ACL example to rate-limit incoming SYNs during
+   a SYN flood attack.
+
+     {
+        "ietf-access-control-list:acls": {
+          "acl": [{
+            "name": "tcp-flags-example-with-rate-limit",
+            "aces": {
+              "ace": [{
+                "name": "rate-limit-syn",
+                "matches": {
+                  "tcp": {
+                    "flags-bitmask": {
+                      "operator": "match",
+                      "bitmask": 2
+                    }
+                  }
+                },
+                "actions": {
+                  "forwarding": "accept",
+                  "rate-limit": "20.00"
+                }
+              }]
+            }
+          }]
+        }
+      }
+
+               Figure 8: Example Rate-Limit Incoming TCP SYNs
 
 5.  YANG Modules
 
@@ -1262,17 +1274,17 @@ Table of Contents
 7.1.  URI Registration
 
    This document requests IANA to register the following URI in the "ns"
-   subregistry within the "IETF XML Registry" [RFC3688]: ~~~ URI:
-   urn:ietf:params:xml:ns:yang:ietf-acl-enh Registrant Contact: The
-   IESG.  XML: N/A; the requested URI is an XML namespace. ~~~
+   subregistry within the "IETF XML Registry" [RFC3688]: ~~~~~~~~~~~
+   URI: urn:ietf:params:xml:ns:yang:ietf-acl-enh Registrant Contact: The
+   IESG.  XML: N/A; the requested URI is an XML namespace. ~~~~~~~~~~~
 
 7.2.  YANG Module Name Registration
 
    This document requests IANA to register the following YANG module in
    the "YANG Module Names" subregistry [RFC6020] within the "YANG
-   Parameters" registry. ~~~ name: ietf-acl-enh namespace:
+   Parameters" registry. ~~~~~~~~~~~ name: ietf-acl-enh namespace:
    urn:ietf:params:xml:ns:yang:ietf-ietf-acl-enh maintained by IANA: N
-   prefix: enh-acl reference: RFC XXXX ~~~
+   prefix: enh-acl reference: RFC XXXX ~~~~~~~~~~~
 
 8.  References
 

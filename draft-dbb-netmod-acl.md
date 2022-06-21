@@ -513,12 +513,12 @@ module: ietf-acl-enh
 
   augment /ietf-acl:acls/ietf-acl:acl:
     +--rw defined-sets
-       +--rw IPv4-prefix-sets
+       +--rw ipv4-prefix-sets
        |  +--rw prefix-set* [name]
        |     +--rw name           string
        |     +--rw description?   string
        |     +--rw prefix*        inet:ipv4-prefix
-       +--rw IPv6-prefix-sets
+       +--rw ipv6-prefix-sets
        |  +--rw prefix-set* [name]
        |     +--rw name           string
        |     +--rw description?   string
@@ -597,13 +597,11 @@ module: ietf-acl-enh
 
 Oscar Brief explanation on the different sets that can be managed and used in matches
 
-## Fragment Handling
+## Flags and Fragment Handling
 
-Med Brief explanation of the fragment handling
+The augmented ACL structure includes new leafs to better handle flags and fragments. 
 
-## Rate limting action
-
-Med
+Clients that support both 'fragment' and 'flags' (or 'flags-bitmask' and 'flags') matching fields MUST NOT set these fields in the same request.
 
 # YANG Modules
 
@@ -1148,24 +1146,24 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 
    This document requests IANA to register the following URI in the "ns"
    subregistry within the "IETF XML Registry" {{!RFC3688}}:
-~~~
+~~~~~~~~~~~
          URI: urn:ietf:params:xml:ns:yang:ietf-acl-enh
          Registrant Contact: The IESG.
          XML: N/A; the requested URI is an XML namespace.
-~~~
+~~~~~~~~~~~
 
 ## YANG Module Name Registration
 
 This document requests IANA to register the following YANG module in
    the "YANG Module Names" subregistry {{!RFC6020}} within the "YANG
    Parameters" registry.
-~~~
+~~~~~~~~~~~
          name: ietf-acl-enh
          namespace: urn:ietf:params:xml:ns:yang:ietf-ietf-acl-enh
          maintained by IANA: N
          prefix: enh-acl
          reference: RFC XXXX
-~~~
+~~~~~~~~~~~
 
 --- back
 

@@ -45,7 +45,8 @@ user-ordered set of filtering rules. The model targets the
 configuration of the filtering behaviour of a device. However, the
 model structure, as defined in {{!RFC8519}}, suffers from a set of limitations. This
 document describes these limitations and proposes an enhanced ACL
-structure.
+structure. The YANG module proposed in this document is solely based
+on augmentations to the ACL YANG module defined in {{!RFC8519}}. 
 
 The motivation of such enhanced ACL structure is discussed in detail in {{ps}}.
 

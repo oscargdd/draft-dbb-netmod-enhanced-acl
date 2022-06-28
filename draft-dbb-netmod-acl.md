@@ -47,7 +47,7 @@ model structure, as defined in {{!RFC8519}}, suffers from a set of limitations. 
 document describes these limitations and proposes an enhanced ACL
 structure.
 
-The motivation of such enhanced ACL structure is discussed in detail in (#ps).
+The motivation of such enhanced ACL structure is discussed in detail in {{ps}}.
 
 When managing ACLs, it is common for network operators to group
 matching elements in pre-defined sets. The consolidation into matches

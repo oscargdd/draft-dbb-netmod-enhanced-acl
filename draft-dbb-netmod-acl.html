@@ -1244,7 +1244,8 @@ user-ordered set of filtering rules. The model targets the
 configuration of the filtering behaviour of a device. However, the
 model structure, as defined in <span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span>, suffers from a set of limitations. This
 document describes these limitations and proposes an enhanced ACL
-structure.<a href="#section-1-1" class="pilcrow">¶</a></p>
+structure. The YANG module proposed in this document is solely based
+on augmentations to the ACL YANG module defined in <span>[<a href="#RFC8519" class="xref">RFC8519</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The motivation of such enhanced ACL structure is discussed in detail in <a href="#ps" class="xref">Section 3</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">When managing ACLs, it is common for network operators to group
 matching elements in pre-defined sets. The consolidation into matches
@@ -1697,11 +1698,11 @@ Each set is uniquely identified by a name, and can be called from the relevant e
 </li>
           <li class="normal" id="section-4.2-2.2">IPv6 Prefix set: It contains a list of IPv6 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prexifes.<a href="#section-4.2-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-2.3">Port sets: It contains a list of port values to be used in TCP / UDP entries. The port values can be individual ports, a range of ports and minor, mayor or equal operators<a href="#section-4.2-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-2.3">Port sets: It contains a list of port values to be used in TCP / UDP entries. The port values can be individual ports, a range of ports and minor, mayor or equal operations.<a href="#section-4.2-2.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-2.4">Protocol sets: It contains a list of IP protocol values.<a href="#section-4.2-2.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-2.4">Protocol sets: It contains a list of protocol values. Each protocol can be identified either by a number (e.g. 17) or a name (e.g. UDP).<a href="#section-4.2-2.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-2.5">ICMP sets: x<a href="#section-4.2-2.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-2.5">ICMP sets: It contains a list of ICMP types, each of them identified by a type value, optionally the code and the rest of the header.<a href="#section-4.2-2.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>

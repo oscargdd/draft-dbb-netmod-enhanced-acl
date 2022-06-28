@@ -100,7 +100,8 @@ Table of Contents
    filtering behaviour of a device.  However, the model structure, as
    defined in [RFC8519], suffers from a set of limitations.  This
    document describes these limitations and proposes an enhanced ACL
-   structure.
+   structure.  The YANG module proposed in this document is solely based
+   on augmentations to the ACL YANG module defined in [RFC8519].
 
    The motivation of such enhanced ACL structure is discussed in detail
    in Section 3.
@@ -535,11 +536,15 @@ Table of Contents
 
    *  Port sets: It contains a list of port values to be used in TCP /
       UDP entries.  The port values can be individual ports, a range of
-      ports and minor, mayor or equal operators
+      ports and minor, mayor or equal operations.
 
-   *  Protocol sets: It contains a list of IP protocol values.
+   *  Protocol sets: It contains a list of protocol values.  Each
+      protocol can be identified either by a number (e.g. 17) or a name
+      (e.g.  UDP).
 
-   *  ICMP sets: x
+   *  ICMP sets: It contains a list of ICMP types, each of them
+      identified by a type value, optionally the code and the rest of
+      the header.
 
 4.3.  TCP Flags Handling
 

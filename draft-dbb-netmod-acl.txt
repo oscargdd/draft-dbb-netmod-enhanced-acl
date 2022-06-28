@@ -103,7 +103,7 @@ Table of Contents
    structure.
 
    The motivation of such enhanced ACL structure is discussed in detail
-   in (#ps).
+   in Section 3.
 
    When managing ACLs, it is common for network operators to group
    matching elements in pre-defined sets.  The consolidation into

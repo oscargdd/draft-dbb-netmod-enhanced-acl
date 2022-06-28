@@ -430,9 +430,9 @@ Each set is uniquely identified by a name, and can be called from the relevant e
 
 * IPv4 Prefix set: It contains a list of IPv4 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prexifes.
 * IPv6 Prefix set: It contains a list of IPv6 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prexifes.
-* Port sets: It contains a list of port values to be used in TCP / UDP entries. The port values can be individual ports, a range of ports and minor, mayor or equal operators
-* Protocol sets: It contains a list of IP protocol values.
-* ICMP sets: x
+* Port sets: It contains a list of port values to be used in TCP / UDP entries. The port values can be individual ports, a range of ports and minor, mayor or equal operations.
+* Protocol sets: It contains a list of protocol values. Each protocol can be identified either by a number (e.g. 17) or a name (e.g. UDP). 
+* ICMP sets: It contains a list of ICMP types, each of them identified by a type value, optionally the code and the rest of the header. 
 
 ## TCP Flags Handling
 

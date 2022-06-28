@@ -45,7 +45,7 @@ user-ordered set of filtering rules. The model targets the
 configuration of the filtering behaviour of a device. However, the
 model structure, as defined in {{!RFC8519}}, suffers from a set of limitations. This
 document describes these limitations and proposes an enhanced ACL
-structure. The YANG module proposed in this document is solely based
+structure. The YANG module in this document is solely based
 on augmentations to the ACL YANG module defined in {{!RFC8519}}.
 
 The motivation of such enhanced ACL structure is discussed in detail in {{ps}}.
@@ -296,7 +296,7 @@ to be defined.  For example, setting other bits not covered by the
 'flags' filtering clause in a packet will allow that packet to get
 through (because it won't match the ACE).
 
-Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to efficiently handle fragment-related filtering rules. Some examples to illustrate how 'fragment' can be used are provided below.
+Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to efficiently handle fragment-related filtering rules.
 
 ## Suboptimal TCP Flags Handling {#ps-flags}
 
@@ -430,8 +430,8 @@ Each set is uniquely identified by a name, and can be called from the relevant e
 
 * IPv4 Prefix set: It contains a list of IPv4 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prexifes.
 * IPv6 Prefix set: It contains a list of IPv6 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prexifes.
-* Port sets: It contains a list of port values to be used in TCP / UDP entries. The port values can be individual ports, a range of ports and minor, mayor or equal operations.
-* Protocol sets: It contains a list of protocol values. Each protocol can be identified either by a number (e.g. 17) or a name (e.g. UDP).
+* Port sets: It contains a list of port numbers to be used in TCP / UDP entries. The ports can be individual port numbers, a range of ports, and an operation.
+* Protocol sets: It contains a list of protocol values. Each protocol can be identified either by a number (e.g., 17) or a name (e.g., UDP).
 * ICMP sets: It contains a list of ICMP types, each of them identified by a type value, optionally the code and the rest of the header.
 
 ## TCP Flags Handling
@@ -1134,7 +1134,7 @@ module ietf-acl-enh {
 }
 <CODE ENDS>
 ~~~
-{: #enh-acl-module}
+
 
 # Security Considerations (TBC)
 
@@ -1163,24 +1163,26 @@ Some of the readable data nodes in this YANG module may be considered sensitive 
 
    This document requests IANA to register the following URI in the "ns"
    subregistry within the "IETF XML Registry" {{!RFC3688}}:
-~~~~~~~~~~~
+
+~~~ ascii-art
          URI: urn:ietf:params:xml:ns:yang:ietf-acl-enh
          Registrant Contact: The IESG.
          XML: N/A; the requested URI is an XML namespace.
-~~~~~~~~~~~
+~~~
 
 ## YANG Module Name Registration
 
 This document requests IANA to register the following YANG module in
    the "YANG Module Names" subregistry {{!RFC6020}} within the "YANG
    Parameters" registry.
-~~~~~~~~~~~
+
+~~~ ascii-art
          name: ietf-acl-enh
          namespace: urn:ietf:params:xml:ns:yang:ietf-ietf-acl-enh
          maintained by IANA: N
          prefix: enh-acl
          reference: RFC XXXX
-~~~~~~~~~~~
+~~~
 
 --- back
 

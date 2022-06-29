@@ -945,7 +945,7 @@ module ietf-acl-enh {
           leaf-list protocol {
             type union {
               type uint8;
-              type string; //Check if we can reuse IANA maintained module
+              type string; //Check if we can reuse IANA maintained module 
             }
             description
               "Value of the protocl set.";
@@ -997,19 +997,19 @@ module ietf-acl-enh {
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4" {
     description
       "Handle non-initial and initial fragments for IPv4 packets.";
-    container fragment {
+    container ipv4-fragment {
       description
         "Indicates how to handle IPv4 fragments.";
       uses fragment-fields;
     }
-    leaf source-prefix-list {
+    leaf source-ipv4-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv4-prefix-sets/prefix-set/name";
       }
       description
         "reference to a prefix list to match the source address";
     }
-    leaf destination-prefix-list {
+    leaf destination-ipv4-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv4-prefix-sets/prefix-set/name";
       }
@@ -1029,19 +1029,19 @@ module ietf-acl-enh {
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
     description
       "Handle non-initial and initial fragments for IPv6 packets.";
-    container fragment {
+    container ipv6-fragment {
       description
         "Indicates how to handle IPv6 fragments.";
       uses fragment-fields;
     }
-    leaf source-prefix-list {
+    leaf source-ipv6-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv6-prefix-sets/prefix-set/name";
       }
       description
         "reference to a prefix list to match the source address";
     }
-    leaf destination-prefix-list {
+    leaf destination-ipv6-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv6-prefix-sets/prefix-set/name";
       }
@@ -1060,45 +1060,45 @@ module ietf-acl-enh {
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp" {
     description
-      "Handle TCP flags.";
+      "Handle TCP flags and port sets.";
     container flags-bitmask {
       description
         "Indicates how to handle TCP flags.";
       uses tcp-flags;
     }
-    leaf source-port-set {
+    leaf source-tcp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the source port";
+        "Reference to a port set to match the source port.";
     }
-    leaf destination-port-set {
+    leaf destination-tcp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the destination port";
+        "Reference to a port set to match the destination port.";
     }
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:udp" {
     description
-      "Handle port sets.";
-    leaf source-port-set {
+      "Handle UDP port sets.";
+    leaf source-udp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the source port";
+        "Reference to a port set to match the source port.";
     }
-    leaf destination-port-set {
+    leaf destination-udp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the destination port";
+        "Reference to a port set to match the destination port.";
     }
   }
 
@@ -1111,7 +1111,7 @@ module ietf-acl-enh {
         path "../../../../defined-sets/icmp-type-sets/icmp-type-set/name";
       }
       description
-        "reference to an ICMP type set to match the icmp type field";
+        "Reference to an ICMP type set to match the ICMP type field.";
     }
   }
 

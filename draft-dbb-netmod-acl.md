@@ -339,8 +339,8 @@ requirements, e.g.:
 
 
 ~~~ ascii-art
-module: ietf-acl-enh
 
+module: ietf-acl-enh
   augment /ietf-acl:acls/ietf-acl:acl:
     +--rw defined-sets
        +--rw ipv4-prefix-sets
@@ -361,8 +361,13 @@ module: ietf-acl-enh
        |        +--rw (port)?
        |           +--:(port-range-or-operator)
        |              +--rw port-range-or-operator
-       |                 +--rw operator?   operator
-       |                 +--rw port        inet:port-number
+       |                 +--rw (port-range-or-operator)?
+       |                    +--:(range)
+       |                    |  +--rw lower-port    inet:port-number
+       |                    |  +--rw upper-port    inet:port-number
+       |                    +--:(operator)
+       |                       +--rw operator?     operator
+       |                       +--rw port          inet:port-number
        +--rw protocol-sets
        |  +--rw protocol-set* [name]
        |     +--rw name        string
@@ -385,34 +390,34 @@ module: ietf-acl-enh
              +--rw prefix?       binary
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4:
-    +--rw fragment
+    +--rw ipv4-fragment
     |  +--rw operator?   operator
     |  +--rw type?       fragment-type
-    +--rw source-prefix-list?        leafref
-    +--rw destination-prefix-list?   leafref
-    +--rw next-header-set?           leafref
+    +--rw source-ipv4-prefix-list?        leafref
+    +--rw destination-ipv4-prefix-list?   leafref
+    +--rw next-header-set?                leafref
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6:
-    +--rw fragment
+    +--rw ipv6-fragment
     |  +--rw operator?   operator
     |  +--rw type?       fragment-type
-    +--rw source-prefix-list?        leafref
-    +--rw destination-prefix-list?   leafref
-    +--rw protocol-set?              leafref
+    +--rw source-ipv6-prefix-list?        leafref
+    +--rw destination-ipv6-prefix-list?   leafref
+    +--rw protocol-set?                   leafref
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp:
     +--rw flags-bitmask
     |  +--rw operator?   operator
     |  +--rw bitmask?    uint16
-    +--rw source-port-set?
+    +--rw source-tcp-port-set?
     |       -> ../../../../defined-sets/port-sets/port-set/name
-    +--rw destination-port-set?
+    +--rw destination-tcp-port-set?
             -> ../../../../defined-sets/port-sets/port-set/name
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l4/ietf-acl:udp:
-    +--rw source-port-set?
+    +--rw source-udp-port-set?
     |       -> ../../../../defined-sets/port-sets/port-set/name
-    +--rw destination-port-set?
+    +--rw destination-udp-port-set?
             -> ../../../../defined-sets/port-sets/port-set/name
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l4/ietf-acl:icmp:
@@ -495,7 +500,7 @@ packets.  The following ACEs are defined (in this order):
                  "name": "drop-all-fragments",
                  "matches": {
                    "ipv4": {
-                     "fragment": {
+                     "ipv4-fragment": {
                        "operator": "match",
                        "type": "isf"
                      }
@@ -550,7 +555,7 @@ packets.  The following ACEs are defined (in this order):
                  "name": "drop-all-fragments",
                  "matches": {
                    "ipv6": {
-                     "fragment": {
+                     "ipv6-fragment": {
                        "operator": "match",
                        "type": "isf"
                      }

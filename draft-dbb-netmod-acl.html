@@ -1034,7 +1034,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Dios, et al.</td>
-<td class="center">Expires 30 December 2022</td>
+<td class="center">Expires 31 December 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1047,12 +1047,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dbb-netmod-acl-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-06-28" class="published">28 June 2022</time>
+<time datetime="2022-06-29" class="published">29 June 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-12-30">30 December 2022</time></dd>
+<dd class="expires"><time datetime="2022-12-31">31 December 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,7 +1107,7 @@ the limitations of the ACL model as initially defined in RFC 8519.<a href="#sect
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1598,7 +1598,6 @@ logical infrastructure.<a href="#section-3.8-3.4" class="pilcrow">¶</a>
           <div class="alignLeft art-ascii-art art-text artwork" id="section-4.1-1.1">
 <pre>
 module: ietf-acl-enh
-
   augment /ietf-acl:acls/ietf-acl:acl:
     +--rw defined-sets
        +--rw ipv4-prefix-sets
@@ -1619,8 +1618,13 @@ module: ietf-acl-enh
        |        +--rw (port)?
        |           +--:(port-range-or-operator)
        |              +--rw port-range-or-operator
-       |                 +--rw operator?   operator
-       |                 +--rw port        inet:port-number
+       |                 +--rw (port-range-or-operator)?
+       |                    +--:(range)
+       |                    |  +--rw lower-port    inet:port-number
+       |                    |  +--rw upper-port    inet:port-number
+       |                    +--:(operator)
+       |                       +--rw operator?     operator
+       |                       +--rw port          inet:port-number
        +--rw protocol-sets
        |  +--rw protocol-set* [name]
        |     +--rw name        string
@@ -1643,34 +1647,34 @@ module: ietf-acl-enh
              +--rw prefix?       binary
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4:
-    +--rw fragment
+    +--rw ipv4-fragment
     |  +--rw operator?   operator
     |  +--rw type?       fragment-type
-    +--rw source-prefix-list?        leafref
-    +--rw destination-prefix-list?   leafref
-    +--rw next-header-set?           leafref
+    +--rw source-ipv4-prefix-list?        leafref
+    +--rw destination-ipv4-prefix-list?   leafref
+    +--rw next-header-set?                leafref
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6:
-    +--rw fragment
+    +--rw ipv6-fragment
     |  +--rw operator?   operator
     |  +--rw type?       fragment-type
-    +--rw source-prefix-list?        leafref
-    +--rw destination-prefix-list?   leafref
-    +--rw protocol-set?              leafref
+    +--rw source-ipv6-prefix-list?        leafref
+    +--rw destination-ipv6-prefix-list?   leafref
+    +--rw protocol-set?                   leafref
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp:
     +--rw flags-bitmask
     |  +--rw operator?   operator
     |  +--rw bitmask?    uint16
-    +--rw source-port-set?
+    +--rw source-tcp-port-set?
     |       -&gt; ../../../../defined-sets/port-sets/port-set/name
-    +--rw destination-port-set?
+    +--rw destination-tcp-port-set?
             -&gt; ../../../../defined-sets/port-sets/port-set/name
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l4/ietf-acl:udp:
-    +--rw source-port-set?
+    +--rw source-udp-port-set?
     |       -&gt; ../../../../defined-sets/port-sets/port-set/name
-    +--rw destination-port-set?
+    +--rw destination-udp-port-set?
             -&gt; ../../../../defined-sets/port-sets/port-set/name
   augment /ietf-acl:acls/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace
             /ietf-acl:matches/ietf-acl:l4/ietf-acl:icmp:
@@ -1781,7 +1785,7 @@ packets.  The following ACEs are defined (in this order):<a href="#section-4.4-3
                  "name": "drop-all-fragments",
                  "matches": {
                    "ipv4": {
-                     "fragment": {
+                     "ipv4-fragment": {
                        "operator": "match",
                        "type": "isf"
                      }
@@ -1843,7 +1847,7 @@ packets.  The following ACEs are defined (in this order):<a href="#section-4.4-3
                  "name": "drop-all-fragments",
                  "matches": {
                    "ipv6": {
-                     "fragment": {
+                     "ipv6-fragment": {
                        "operator": "match",
                        "type": "isf"
                      }
@@ -2260,7 +2264,7 @@ module ietf-acl-enh {
           leaf-list protocol {
             type union {
               type uint8;
-              type string; //Check if we can reuse IANA maintained module
+              type string; //Check if we can reuse an IANA-maintained module
             }
             description
               "Value of the protocl set.";
@@ -2312,19 +2316,19 @@ module ietf-acl-enh {
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv4" {
     description
       "Handle non-initial and initial fragments for IPv4 packets.";
-    container fragment {
+    container ipv4-fragment {
       description
         "Indicates how to handle IPv4 fragments.";
       uses fragment-fields;
     }
-    leaf source-prefix-list {
+    leaf source-ipv4-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv4-prefix-sets/prefix-set/name";
       }
       description
         "reference to a prefix list to match the source address";
     }
-    leaf destination-prefix-list {
+    leaf destination-ipv4-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv4-prefix-sets/prefix-set/name";
       }
@@ -2344,19 +2348,19 @@ module ietf-acl-enh {
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
     description
       "Handle non-initial and initial fragments for IPv6 packets.";
-    container fragment {
+    container ipv6-fragment {
       description
         "Indicates how to handle IPv6 fragments.";
       uses fragment-fields;
     }
-    leaf source-prefix-list {
+    leaf source-ipv6-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv6-prefix-sets/prefix-set/name";
       }
       description
         "reference to a prefix list to match the source address";
     }
-    leaf destination-prefix-list {
+    leaf destination-ipv6-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv6-prefix-sets/prefix-set/name";
       }
@@ -2375,45 +2379,45 @@ module ietf-acl-enh {
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp" {
     description
-      "Handle TCP flags.";
+      "Handle TCP flags and port sets.";
     container flags-bitmask {
       description
         "Indicates how to handle TCP flags.";
       uses tcp-flags;
     }
-    leaf source-port-set {
+    leaf source-tcp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the source port";
+        "Reference to a port set to match the source port.";
     }
-    leaf destination-port-set {
+    leaf destination-tcp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the destination port";
+        "Reference to a port set to match the destination port.";
     }
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:udp" {
     description
-      "Handle port sets.";
-    leaf source-port-set {
+      "Handle UDP port sets.";
+    leaf source-udp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the source port";
+        "Reference to a port set to match the source port.";
     }
-    leaf destination-port-set {
+    leaf destination-udp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "reference to a port set to match the destination port";
+        "Reference to a port set to match the destination port.";
     }
   }
 
@@ -2426,7 +2430,7 @@ module ietf-acl-enh {
         path "../../../../defined-sets/icmp-type-sets/icmp-type-set/name";
       }
       description
-        "reference to an ICMP type set to match the icmp type field";
+        "Reference to an ICMP type set to match the ICMP type field.";
     }
   }
 

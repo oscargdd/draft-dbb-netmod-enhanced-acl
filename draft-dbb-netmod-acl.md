@@ -950,7 +950,7 @@ module ietf-acl-enh {
           leaf-list protocol {
             type union {
               type uint8;
-              type string; //Check if we can reuse IANA maintained module 
+              type string; //Check if we can reuse an IANA-maintained module
             }
             description
               "Value of the protocl set.";

@@ -291,7 +291,8 @@ A candidate structure is shown in {{example_sets}}:
 {: #example_sets title="Examples of Defined Sets."}
 
 
-Aliases may also be considered to managed resources that are identified by a combination of various parameters as shown in the candidate tree in {{example_alias}}. Some aliases can be provided by decomposing them into separate sets. 
+Aliases may also be considered to managed resources that are identified by a combination of various parameters as shown in the candidate tree in {{example_alias}} (inspired from {{RFC8783}}.
+Note that some aliases can be provided by decomposing them into separate sets.
 
 ~~~ ascii-art
         |  +--rw aliases

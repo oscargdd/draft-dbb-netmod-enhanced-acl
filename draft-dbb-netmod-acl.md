@@ -761,7 +761,6 @@ module ietf-acl-enh {
      description
        "Specifies how to apply the defined bitmask.
        'any' and 'match' bits must not be set simultaneously.";
-    }
   }
 
   typedef fragment-type {
@@ -1216,4 +1215,10 @@ This document requests IANA to register the following YANG module in
 
 # Acknowledgements
 
-Many thanks to Jon Shallow and Miguel Cros for the discussion when preparing this document.
+Many thanks to Jon Shallow and Miguel Cros for the review and comments to the document, incuding priror to publishing the document.
+
+Thanks for Qin Wu for the comments and suggestions.
+
+This work is partially supported by the European Commission under   Horizon 2020 Secured autonomic traffic management for a Tera of SDN
+ flows (Teraflow) project (grant agreement number 101015857).
+

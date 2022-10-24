@@ -756,14 +756,12 @@ module ietf-acl-enh {
            bitmask.  It evaluates to 'true' if any of the bits
            in the value mask are set in the data,
            i.e., '(data & value) != 0'.";
-         }
        }
-       description
-         "Specifies how to apply the defined bitmask.
-          'any' and 'match' bits must not be set simultaneously.";
+     }
+     description
+       "Specifies how to apply the defined bitmask.
+       'any' and 'match' bits must not be set simultaneously.";
     }
-    description
-      "How to apply the defined bitmask.";
   }
 
   typedef fragment-type {

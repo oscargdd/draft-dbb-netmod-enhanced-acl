@@ -40,7 +40,7 @@ the limitations of the ACL model as initially defined in RFC 8519.
 --- middle
 
 # Introduction
-{{!RFC8519}} defines Acces control lists (ACLs) as a
+{{!RFC8519}} defines Access control lists (ACLs) as a
 user-ordered set of filtering rules. The model targets the
 configuration of the filtering behaviour of a device. However, the
 model structure, as defined in {{!RFC8519}}, suffers from a set of limitations. This
@@ -51,8 +51,8 @@ on augmentations to the ACL YANG module defined in {{!RFC8519}}.
 The motivation of such enhanced ACL structure is discussed in detail in {{ps}}.
 
 When managing ACLs, it is common for network operators to group
-matching elements in pre-defined sets. The consolidation into matches
-allows reducing the number of rules, especially in large scale
+match elements in pre-defined sets. The consolidation into group matches
+allows for reducing the number of rules, especially in large scale
 networks. If it is needed, for example, to find a match against 100
 IP addresses (or prefixes), a single rule will suffice rather than creating
 individual Access Control Entries (ACEs) for each IP address (or prefix). In
@@ -81,7 +81,7 @@ e.g., deny-lists or accept-lists that are associated with those provided by a
 Note that ACLs are used locally in devices but are triggered by other
 tools such as DDoS mitigation {{?RFC9132}} or BGP Flow Spec {{?RFC8955}}
 {{!RFC8956}}. Therefore, supporting means to easily map to the filtering rules conveyed in
-messages triggered by  hese tools is valuable from a network operation standpoint.
+messages triggered by  these tools is valuable from a network operation standpoint.
 
 # Terminology
 
@@ -94,17 +94,18 @@ The meaning of the symbols in the tree diagrams is defined in
 {{?RFC8340}}.
 
 
-In adition to the terms defined in {{!RFC8519}}, this document makes use of the following terms:
+In addition to the terms defined in {{!RFC8519}}, this document makes use of the following terms:
 
-- Defined set: Refers to reusable description of one or multiple information elements (e.g., IP address, IP prefix, port number, ICMP type).
+- Defined set: Refers to reusable description of one or multiple information elements (e.g., IP address, IP prefix, port number, or ICMP type).
 
 # Problem Statement & Gap Analysis {#ps}
 
-## Suboptimal Configuration: Lack of Manipulating Lists of Prefixes {#ps-sets}
+## Suboptimal Configuration: Lack of Support for Lists of Prefixes {#ps-sets}
 
-IP prefix related data nodes, e.g., "destination-ipv4-network"
-or "destination-ipv6-network", do not allow manipulating a list of IP
-prefixes, which may lead to manipulating large files. The same issue
+IP prefix related data nodes, e.g., "destination-ipv4-network" or
+   "destination-ipv6-network", do not support handling a list of IP
+   prefixes, which may then lead to having to support large numbers of ACL entries in a configuration file.   
+The same issue
 is encountered when ACLs have to be in place to mitigate DDoS
 attacks (e.g., {{?RFC9132}} when a set of sources are involved in such
 an attack. The situation is even worse when both a list of sources
@@ -190,11 +191,15 @@ and destination prefixes are involved.
 ~~~~~~~~~~~
 {: #example title="Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List"}
 
-Such configuration is suboptimal for both:
-- Network controllers that need to manipulate large files. All or a subset fo this configuration will need to be passed to the undelrying network devices.
-- Devices may receive such confirguration and thus will need to maintain it locally.
+Such a configuration is suboptimal for both:
+- Network controllers that
+   need to manipulate large files.  All or a subset for this
+   configuration will need to be passed to the underlying network
+   devices
 
-({{example_1}} depicts an example of an optimized strcuture:
+- Devices may receive such a confirguration and thus will need to maintain it locally.
+
+({{example_1}} depicts an example of an optimized structure:
 
 ~~~~~~~~~~~
 {
@@ -251,7 +256,10 @@ The defined sets are reusable definitions across several ACLs. Each category is 
 
 -  Prefix sets: Used to create lists of IPv4 or IPv6 prefixes.
 -  Protocol sets: Used to create a list of protocols.
--  Port number sets: Used to create lists of TCP or UDP port values (or any other transport protocol that makes uses of port numbers). The identity of the protcols is identified by the protocol set, if present. Otherwise, a set apply to any protocol.
+-  Port number sets: Used to create lists of TCP or UDP port values
+      (or any other transport protocol that makes uses of port numbers).
+      The identity of the protocols is identified by the protocol set, if
+      present.  Otherwise, a set applies to any protocol.
 -  ICMP sets: Uses to create lists of ICMP-based filters. This applies only when the protocol is set to ICMP or ICMPv6.
 
 A candidate structure is shown in {{example_sets}}:
@@ -260,7 +268,7 @@ A candidate structure is shown in {{example_sets}}:
 ~~~ ascii-art
      +--rw defined-sets
      |  +--rw prefix-sets
-     |  |  +--rw prefix-set* [name mode]
+     |  |  +--rw prefix-set* [name]
      |  |     +--rw name        string
      |  |     +--rw ip-prefix*   inet:ip-prefix
      |  +--rw port-sets
@@ -283,9 +291,11 @@ A candidate structure is shown in {{example_sets}}:
 
 ## Bind ACLs to Devices, Not Only Interfaces
 
-In the context of network management, an ACL may be enforced in many network locations. As such, the ACL module should allow binding an ACL to multiple devices, not only (abstract) interfaces.
+In the context of network management, an ACL may be enforced in many
+   network locations.  As such, the ACL module should allow for binding an
+   ACL to multiple devices, not only (abstract) interfaces.
 
-The ACL name must, thus, be unique at the scale of the network, but still the same name may be used in many devices when enforcing node-specific ACLs.
+The ACL name must, thus, be unique at the scale of the network, but the same name may be used in many devices when enforcing node-specific ACLs.
 
 ## Partial or Lack of IPv4/IPv6 Fragment Handling {#ps-frag}
 
@@ -300,19 +310,24 @@ Defining a new IPv4/IPv6 matching field called 'fragment' is thus required to ef
 
 ## Suboptimal TCP Flags Handling {#ps-flags}
 
-{{!RFC8519}} allows including flags in the TCP match fields, however that strcuture does not support matching operations as those supported in BGP Flow Spec. Definig this field to be defined as a flag bitmask together with a set of operations is meant to efficiently handle TCP flags filtering rules.
+{{!RFC8519}} supports including flags in the TCP match fields, however
+   that structure does not support matching operations as those
+   supported in BGP Flow Spec.  Defining this field to be defined as a
+   flag bitmask together with a set of operations is meant to
+   efficiently handle TCP flags filtering rules.
+
 
 ## Rate-Limit Action {#ps-rate}
 
  {{!RFC8519}} specifies that forwarding actions can be 'accept' (i.e., accept matching
    traffic), 'drop' (i.e., drop matching traffic without sending any
-   ICMP error message), or 'reject' (i.e., drop matching traffic and send an ICMP error message to the source). Howover, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by {{!RFC8519}}.
+   ICMP error message), or 'reject' (i.e., drop matching traffic and send an ICMP error message to the source). However, there are situations where the matching traffic can be accepted, but with a rate-limit policy. Such capability is not currently supported by {{!RFC8519}}.
 
 ## Payload-based Filtering {#ps-pf}
 
 Some transport protocols use existing protocols (e.g., TCP or UDP) as substrate. The match criteria for such protocols may rely upon the 'protocol' under 'l3', TCP/UDP match criteria, part of the TCP/UDP payload, or a combination thereof. {{!RFC8519}} does not support matching based on the payload.
 
-Likewise, the current version of the ACL model does not support filetering of encapsulated traffic.
+Likewise, the current version of the ACL model does not support filtering of encapsulated traffic.
 
 ## Reuse the ACLs Content Across Several Devices
 
@@ -433,8 +448,8 @@ module: ietf-acl-enh
 The augmented ACL structure includes several containers to manage reusable sets of elements that can be matched in an ACL entry.
 Each set is uniquely identified by a name, and can be called from the relevant entry. The following sets are defined:
 
-* IPv4 Prefix set: It contains a list of IPv4 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prexifes.
-* IPv6 Prefix set: It contains a list of IPv6 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prexifes.
+* IPv4 Prefix set: It contains a list of IPv4 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prefixes.
+* IPv6 Prefix set: It contains a list of IPv6 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prefixes.
 * Port sets: It contains a list of port numbers to be used in TCP / UDP entries. The ports can be individual port numbers, a range of ports, and an operation.
 * Protocol sets: It contains a list of protocol values. Each protocol can be identified either by a number (e.g., 17) or a name (e.g., UDP).
 * ICMP sets: It contains a list of ICMP types, each of them identified by a type value, optionally the code and the rest of the header.
@@ -534,7 +549,7 @@ packets.  The following ACEs are defined (in this order):
      }
    }
 ~~~
-{: #example_2 title="Example Illustrating Canddiate Filtering of IPv4 Fragmented Packets."}
+{: #example_2 title="Example Illustrating Candidate Filtering of IPv4 Fragmented Packets."}
 
 {{example_3}} shows an example of the body of a POST request to allow the traffic destined to 2001:db8::/32 and UDP port number 53, but to drop all fragmented packets. The following ACEs are defined (in this order):
 
@@ -589,7 +604,7 @@ packets.  The following ACEs are defined (in this order):
      }
    }
 ~~~
-{: #example_3 title="Example Illustrating Canddiate Filtering of IPv6 Fragmented Packets."}
+{: #example_3 title="Example Illustrating Candidate Filtering of IPv6 Fragmented Packets."}
 
 ## Rate-Limit Traffic
 
@@ -729,11 +744,21 @@ module ietf-acl-enh {
       bit match {
         position 1;
         description
-          "Match bit.  If set, this is a bitwise match operation
-           defined as '(data & value) == value'; if unset, (data &
-           value) evaluates to TRUE if any of the bits in the value
-           mask are set in the data , i.e., '(data & value) != 0'.";
+          "Match bit.  This is a bitwise match operation
+           defined as '(data & value) == value'.";
       }
+      bit any {
+        position 2;
+        description
+          "Any bit.  This is a match on any of the bits in
+           bitmask.  It evaluates to 'true' if any of the bits
+           in the value mask are set in the data,
+           i.e., '(data & value) != 0'.";
+         }
+       }
+       description
+         "Specifies how to apply the defined bitmask.
+          'any' and 'match' bits must not be set simultaneously.";
     }
     description
       "How to apply the defined bitmask.";
@@ -778,14 +803,11 @@ module ietf-acl-enh {
     }
     leaf bitmask {
       type uint16;
-      description
-        "Bitmask values can be encoded as a 1- or 2-byte bitmask.
-         When a single byte is specified, it matches byte 13
-         of the TCP header, which contains bits 8 though 15
-         of the 4th 32-bit word.  When a 2-byte encoding is used,
-         it matches bytes 12 and 13 of the TCP header with
-         the bitmask fields corresponding to the TCP data offset
-         field being ignored for purposes of matching.";
+      description       
+        "The bitmask matches the last 4 bits of byte 12
+        and byte 13 of the TCP header.  For clarity, the 4 bits
+        of byte 12 corresponding to the TCP data offset field
+        are not included in any matching.";      
     }
   }
 
@@ -849,7 +871,7 @@ module ietf-acl-enh {
         list prefix-set {
           key "name";
           description
-            "List of the defined prefix sets";
+            "List of the defined prefix sets.";
           leaf name {
             type string;
             description
@@ -859,7 +881,7 @@ module ietf-acl-enh {
           leaf description {
             type string;
             description
-              "Defined Set description";
+              "Defined Set description.";
           }
           leaf-list prefix {
             type inet:ipv4-prefix;
@@ -876,7 +898,7 @@ module ietf-acl-enh {
         list prefix-set {
           key "name";
           description
-            "List of the defined prefix sets";
+            "List of the defined prefix sets.";
           leaf name {
             type string;
             description
@@ -907,7 +929,7 @@ module ietf-acl-enh {
           leaf name {
             type string;
             description
-              "Name of the portset -- this is used as a label to
+              "Name of the port set -- this is used as a label to
                reference the set in match conditions.";
           }
           list port {
@@ -918,7 +940,7 @@ module ietf-acl-enh {
             leaf id {
               type string;
               description
-                "Identifier of the list of ports.";
+                "Identifier of the list of port numbers.";
             }
             choice port {
               description
@@ -1012,28 +1034,28 @@ module ietf-acl-enh {
         path "../../../../defined-sets/ipv4-prefix-sets/prefix-set/name";
       }
       description
-        "reference to a prefix list to match the source address";
+        "A reference to a prefix list to match the source address.";
     }
     leaf destination-ipv4-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv4-prefix-sets/prefix-set/name";
       }
       description
-        "reference to a prefix list to match the destination address";
+        "A reference to a prefix list to match the destination address.";
     }
     leaf next-header-set {
       type leafref {
         path "../../../../defined-sets/protocol-sets/protocol-set/name";
       }
       description
-        "reference to a protocol set to match the next-header field";
+        "A reference to a protocol set to match the next-header field.";
     }
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l3/ietf-acl:ipv6" {
     description
-      "Handle non-initial and initial fragments for IPv6 packets.";
+      "Handles non-initial and initial fragments for IPv6 packets.";
     container ipv6-fragment {
       description
         "Indicates how to handle IPv6 fragments.";
@@ -1044,28 +1066,28 @@ module ietf-acl-enh {
         path "../../../../defined-sets/ipv6-prefix-sets/prefix-set/name";
       }
       description
-        "reference to a prefix list to match the source address";
+        "A reference to a prefix list to match the source address.";
     }
     leaf destination-ipv6-prefix-list {
       type leafref {
         path "../../../../defined-sets/ipv6-prefix-sets/prefix-set/name";
       }
       description
-        "reference to a prefix list to match the destination address";
+        "A reference to a prefix list to match the destination address.";
     }
     leaf protocol-set {
       type leafref {
         path "../../../../defined-sets/protocol-sets/protocol-set/name";
       }
       description
-        "reference to a protocol set to match the protocol field";
+        "A reference to a protocol set to match the protocol field.";
     }
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:matches/ietf-acl:l4/ietf-acl:tcp" {
     description
-      "Handle TCP flags and port sets.";
+      "Handles TCP flags and port sets.";
     container flags-bitmask {
       description
         "Indicates how to handle TCP flags.";
@@ -1076,14 +1098,14 @@ module ietf-acl-enh {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "Reference to a port set to match the source port.";
+        "A reference to a port set to match the source port.";
     }
     leaf destination-tcp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "Reference to a port set to match the destination port.";
+        "A reference to a port set to match the destination port.";
     }
   }
 
@@ -1096,14 +1118,14 @@ module ietf-acl-enh {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "Reference to a port set to match the source port.";
+        "A reference to a port set to match the source port.";
     }
     leaf destination-udp-port-set {
       type leafref {
         path "../../../../defined-sets/port-sets/port-set/name";
       }
       description
-        "Reference to a port set to match the destination port.";
+        "A reference to a port set to match the destination port.";
     }
   }
 
@@ -1116,22 +1138,23 @@ module ietf-acl-enh {
         path "../../../../defined-sets/icmp-type-sets/icmp-type-set/name";
       }
       description
-        "Reference to an ICMP type set to match the ICMP type field.";
+        "A reference to an ICMP type set to match the ICMP type field.";
     }
   }
 
   augment "/ietf-acl:acls/ietf-acl:acl/ietf-acl:aces"
         + "/ietf-acl:ace/ietf-acl:actions" {
     description
-      "rate-limit action.";
+      "Rate-limit action.";
     leaf rate-limit {
       when "../ietf-acl:forwarding = 'ietf-acl:accept'" {
         description
-          "rate-limit valid only when accept action is used.";
+          "Rate-limit valid only when accept action is used.";
       }
       type decimal64 {
         fraction-digits 2;
       }
+      units "bytes per second";
       description
         "Indicates a rate-limit for the matched traffic.";
     }

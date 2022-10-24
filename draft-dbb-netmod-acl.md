@@ -290,6 +290,27 @@ A candidate structure is shown in {{example_sets}}:
 ~~~
 {: #example_sets title="Examples of Defined Sets."}
 
+
+Aliases may also be considered to managed resources that are identified by a combination of various parameters as shown in the candidate tree in {{example_alias}}. Some aliases can be provided by decomposing them into separate sets. 
+
+~~~ ascii-art
+        |  +--rw aliases
+        |  |  +--rw alias* [name]
+        |  |     +--rw name                 string
+        |  |     +--rw prefix*       inet:ip-prefix
+        |  |     +--rw port-range* [lower-port]
+        |  |     |  +--rw lower-port    inet:port-number
+        |  |     |  +--rw upper-port?   inet:port-number
+        |  |     +--rw protocol*     uint8
+        |  |     +--rw fqdn*         inet:domain-name
+        |  |     +--rw uri*          inet:uri
+        |  +--rw acls
+        |     ...
+        |           +--rw rest-of-header?   binary
+~~~
+{: #example_alias title="Examples of Aliases."}
+
+
 ## Bind ACLs to Devices, Not Only Interfaces
 
 In the context of network management, an ACL may be enforced in many

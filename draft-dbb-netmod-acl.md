@@ -104,7 +104,8 @@ In addition to the terms defined in {{!RFC8519}}, this document makes use of the
 
 IP prefix related data nodes, e.g., "destination-ipv4-network" or
    "destination-ipv6-network", do not support handling a list of IP
-   prefixes, which may then lead to having to support large numbers of ACL entries in a configuration file.   
+   prefixes, which may then lead to having to support large numbers of ACL entries in a configuration file.
+
 The same issue
 is encountered when ACLs have to be in place to mitigate DDoS
 attacks (e.g., {{?RFC9132}} when a set of sources are involved in such
@@ -448,8 +449,8 @@ module: ietf-acl-enh
 The augmented ACL structure includes several containers to manage reusable sets of elements that can be matched in an ACL entry.
 Each set is uniquely identified by a name, and can be called from the relevant entry. The following sets are defined:
 
-* IPv4 Prefix set: It contains a list of IPv4 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prefixes.
-* IPv6 Prefix set: It contains a list of IPv6 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prefixes.
+* IPv4 prefix set: It contains a list of IPv4 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prefixes.
+* IPv6 prefix set: It contains a list of IPv6 prefixes. A match will be considered if the IP address (source or destination, depending on the ACL entry) is contained in any of the prefixes.
 * Port sets: It contains a list of port numbers to be used in TCP / UDP entries. The ports can be individual port numbers, a range of ports, and an operation.
 * Protocol sets: It contains a list of protocol values. Each protocol can be identified either by a number (e.g., 17) or a name (e.g., UDP).
 * ICMP sets: It contains a list of ICMP types, each of them identified by a type value, optionally the code and the rest of the header.
@@ -646,7 +647,7 @@ In order to support rate-limiting (see {{ps-rate}}), a new action called "rate-l
 
 
 ~~~ ascii-art
-<CODE BEGINS> file "ietf-acl-enh@2022-06-16.yang"
+<CODE BEGINS> file "ietf-acl-enh@2022-10-24.yang"
 module ietf-acl-enh {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-acl-enh";
@@ -698,11 +699,12 @@ module ietf-acl-enh {
      This version of this YANG module is part of RFC XXXX; see
      the RFC itself for full legal notices.";
 
-  revision 2022-06-16 {
+  revision 2022-10-24 {
     description
       "Initial revision.";
     reference
-      "RFC XXXX: xxxxx";
+      "RFC XXXX: Extensions to the Access Control Lists (ACLs)
+                 YANG Model";
   }
 
   feature match-on-payload {
@@ -803,11 +805,11 @@ module ietf-acl-enh {
     }
     leaf bitmask {
       type uint16;
-      description       
+      description
         "The bitmask matches the last 4 bits of byte 12
         and byte 13 of the TCP header.  For clarity, the 4 bits
         of byte 12 corresponding to the TCP data offset field
-        are not included in any matching.";      
+        are not included in any matching.";
     }
   }
 

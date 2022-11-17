@@ -1,0 +1,128 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-11-17T01:16:49.833915+00:00",
+  "repo": "oscargdd/draft-dbb-netmod-enhanced-acl",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 3,
+      "id": "I_kwDOHQVDBc5WcV3b",
+      "title": "Create standalone container for Defined Set",
+      "url": "https://github.com/oscargdd/draft-dbb-netmod-enhanced-acl/issues/3",
+      "state": "OPEN",
+      "author": "oscargdd",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "WG feedback @IETF 115 meeting was that a standalone container could be best usable by other models. ",
+      "createdAt": "2022-11-15T19:27:24Z",
+      "updatedAt": "2022-11-15T19:27:24Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOHQVDBc43CL3g",
+      "title": "fix name",
+      "url": "https://github.com/oscargdd/draft-dbb-netmod-enhanced-acl/pull/1",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-04-29T09:18:25Z",
+      "updatedAt": "2022-04-29T09:29:57Z",
+      "baseRepository": "oscargdd/draft-dbb-netmod-enhanced-acl",
+      "baseRefName": "main",
+      "baseRefOid": "e80affcefa510a538afe95d52f973700448ef5fd",
+      "headRepository": "boucadair/draft-dbb-netmod-enhanced-acl",
+      "headRefName": "patch-1",
+      "headRefOid": "93909d2e466de462bdf55a58deb02b7078ab5ac5",
+      "closedAt": "2022-04-29T09:29:57Z",
+      "mergedAt": "2022-04-29T09:29:57Z",
+      "mergedBy": "oscargdd",
+      "mergeCommit": {
+        "oid": "b5da3d02e817d32e64e4c241bb5698b45bdf0093"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOHQVDBc45xHaj",
+      "title": "Update IANA section + Module",
+      "url": "https://github.com/oscargdd/draft-dbb-netmod-enhanced-acl/pull/2",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-06-16T10:50:10Z",
+      "updatedAt": "2022-06-16T11:55:29Z",
+      "baseRepository": "oscargdd/draft-dbb-netmod-enhanced-acl",
+      "baseRefName": "main",
+      "baseRefOid": "b17b98d3597d8a4e6cf83417642f2f4cb7ceb9e3",
+      "headRepository": "boucadair/draft-dbb-netmod-enhanced-acl",
+      "headRefName": "patch-2",
+      "headRefOid": "80685ebeab9e8100832a2e169542f9a9d97ac075",
+      "closedAt": "2022-06-16T11:55:29Z",
+      "mergedAt": "2022-06-16T11:55:29Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "2adb465a9c0d21efe5debacaf60b3c72e9986347"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}

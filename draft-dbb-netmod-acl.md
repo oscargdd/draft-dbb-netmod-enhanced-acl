@@ -200,7 +200,7 @@ Such a configuration is suboptimal for both:
    devices
 - Devices may receive such a configuration and thus will need to maintain it locally.
 
-({{example_1}} depicts an example of an optimized structure:
+{{example_1}} depicts an example of an optimized structure:
 
 ~~~~~~~~~~~
 {
@@ -633,7 +633,7 @@ packets.  The following ACEs are defined (in this order):
 
 In order to support rate-limiting (see {{ps-rate}}), a new action called "rate-limit" is defined.
 
-(#example_5) shows an ACL example to rate-limit incoming SYNs during a SYN flood attack.
+{{example_5}} shows an ACL example to rate-limit incoming SYNs during a SYN flood attack.
 
 ~~~ ascii-art
   {

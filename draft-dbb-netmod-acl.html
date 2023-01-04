@@ -13,26 +13,26 @@
 (ACLs). This document discusses a set of extensions that fix many of
 the limitations of the ACL model as initially defined in RFC 8519. 
     " name="description">
-<meta content="xml2rfc 3.15.1" name="generator">
+<meta content="xml2rfc 3.15.3" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dbb-netmod-acl-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.15.1
-    Python 3.10.5
+  xml2rfc 3.15.3
+    Python 3.10.9
     appdirs 1.4.4
     ConfigArgParse 1.5.3
     google-i18n-address 2.5.2
     html5lib 1.1
     intervaltree 3.1.0
     Jinja2 3.1.2
-    kitchen 1.2.6
-    lxml 4.9.1
+    lxml 4.9.2
     MarkupSafe 2.1.1
     pycountry 22.3.5
     PyYAML 6.0
-    requests 2.27.1
-    setuptools 59.4.0
+    requests 2.28.1
+    setuptools 65.6.0
     six 1.16.0
+    wcwidth 0.2.5
 -->
 <link href="draft-dbb-netmod-acl.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -399,7 +399,7 @@ dl > dd > dl {
   margin-top: 0.5em;
   margin-bottom: 0;
 }
-dl .break {
+:is(dd, span).break {
   display: none;
 }
 
@@ -419,7 +419,7 @@ a[href]:hover {
 a[href].selfRef:hover {
   background-color: var(--highlight-color);
 }
-a.xref {
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
 }
 
@@ -431,7 +431,9 @@ tt, code, pre {
 tt, code {
   /* changing the font for inline elements leads to different ascender
      and descender heights; as we want to retain baseline alignment,
-     remove leading to avoid altering the final height of lines */
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
   line-height: 0;
 }
 :is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
@@ -1028,7 +1030,7 @@ svg :is([stroke="white"], [stroke^="#fff"]) {
 svg :is([fill="black"], [fill^="#000"], :not([fill])) {
   fill: var(--text-color);
 }
-svg :is([stroke="fill"], [fill^="#fff"]) {
+svg :is([fill="white"], [fill^="#fff"]) {
   fill: var(--background-color);
 }
 </style>
@@ -1039,11 +1041,11 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Enhanced ACLs</td>
-<td class="right">October 2022</td>
+<td class="right">January 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Dios, et al.</td>
-<td class="center">Expires 27 April 2023</td>
+<td class="center">Expires 8 July 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1056,12 +1058,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dbb-netmod-acl-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-10-24" class="published">24 October 2022</time>
+<time datetime="2023-01-04" class="published">4 January 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-04-27">27 April 2023</time></dd>
+<dd class="expires"><time datetime="2023-07-08">8 July 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1116,7 +1118,7 @@ the limitations of the ACL model as initially defined in RFC 8519.<a href="#sect
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 27 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 July 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1125,7 +1127,7 @@ the limitations of the ACL model as initially defined in RFC 8519.<a href="#sect
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2022 IETF Trust and the persons identified as the
+            Copyright (c) 2023 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1406,13 +1408,14 @@ and destination prefixes are involved.<a href="#section-3.1-2" class="pilcrow">�
 <a href="#name-example-illustrating-sub-op" class="selfRef">Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List</a>
           </figcaption></figure>
 </div>
-<p id="section-3.1-5">Such a configuration is suboptimal for both:
-- Network controllers that
-   need to manipulate large files.  All or a subset for this
-   configuration will need to be passed to the underlying network
-   devices<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">Such a configuration is suboptimal for both:<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1-6.1">Devices may receive such a confirguration and thus will need to maintain it locally.<a href="#section-3.1-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.1-6.1">Network controllers that
+ need to manipulate large files.  All or a subset for this
+ configuration will need to be passed to the underlying network
+ devices<a href="#section-3.1-6.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.1-6.2">Devices may receive such a configuration and thus will need to maintain it locally.<a href="#section-3.1-6.2" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-3.1-7">(<a href="#example_1" class="auto internal xref">Figure 2</a> depicts an example of an optimized structure:<a href="#section-3.1-7" class="pilcrow">¶</a></p>
@@ -1475,7 +1478,7 @@ and destination prefixes are involved.<a href="#section-3.1-2" class="pilcrow">�
         <h3 id="name-manageability-impossibility">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-manageability-impossibility" class="section-name selfRef">Manageability: Impossibility to Use Aliases or Defined Sets</a>
         </h3>
-<p id="section-3.2-1">The same approach as the one discussed for IP prefixes can be generalized by introduing the concept of "aliases" or "defined sets".<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The same approach as the one discussed for IP prefixes can be generalized by introducing the concept of "aliases" or "defined sets".<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">The defined sets are reusable definitions across several ACLs. Each category is modelled in YANG as a list of parameters related to the class it represents. The following sets can be considered:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2-3.1">Prefix sets: Used to create lists of IPv4 or IPv6 prefixes.<a href="#section-3.2-3.1" class="pilcrow">¶</a>
@@ -1993,8 +1996,8 @@ packets.  The following ACEs are defined (in this order):<a href="#section-4.4-3
         <h3 id="name-enhanced-acl-2">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-enhanced-acl-2" class="section-name selfRef">Enhanced ACL</a>
         </h3>
-<div id="section-5.1-1">
-<pre class="breakable lang-ascii-art sourcecode">&lt;CODE BEGINS&gt; file "ietf-acl-enh@2022-10-24.yang"
+<div class="breakable lang-ascii-art sourcecode" id="section-5.1-1">
+<pre>&lt;CODE BEGINS&gt; file "ietf-acl-enh@2022-10-24.yang"
 
 module ietf-acl-enh {
   yang-version 1.1;
@@ -2662,7 +2665,7 @@ module ietf-acl-enh {
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="appendix-A-1">Many thanks to Jon Shallow and Miguel Cros for the review and comments to the document, incuding priror to publishing the document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2">Thanks for Qin Wu for the comments and suggestions.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Thanks for Qin Wu and Qiufang Ma for the comments and suggestions.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <p id="appendix-A-3">This work is partially supported by the European Commission under   Horizon 2020 Secured autonomic traffic management for a Tera of SDN
  flows (Teraflow) project (grant agreement number 101015857).<a href="#appendix-A-3" class="pilcrow">¶</a></p>
 </section>

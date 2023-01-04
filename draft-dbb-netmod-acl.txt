@@ -5,9 +5,9 @@
 netmod                                                     O. G. D. Dios
 Internet-Draft                                                S. Barguil
 Intended status: Standards Track                              Telefonica
-Expires: 27 April 2023                                      M. Boucadair
+Expires: 8 July 2023                                        M. Boucadair
                                                                   Orange
-                                                         24 October 2022
+                                                          4 January 2023
 
 
         Extensions to the Access Control Lists (ACLs) YANG Model
@@ -45,11 +45,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 April 2023.
+   This Internet-Draft will expire on 8 July 2023.
 
 Copyright Notice
 
-   Copyright (c) 2022 IETF Trust and the persons identified as the
+   Copyright (c) 2023 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -254,12 +254,13 @@ Table of Contents
       Figure 1: Example Illustrating Sub-optimal Use of the ACL Model
                              with a Prefix List
 
-   Such a configuration is suboptimal for both: - Network controllers
-   that need to manipulate large files.  All or a subset for this
-   configuration will need to be passed to the underlying network
-   devices
+   Such a configuration is suboptimal for both:
 
-   *  Devices may receive such a confirguration and thus will need to
+   *  Network controllers that need to manipulate large files.  All or a
+      subset for this configuration will need to be passed to the
+      underlying network devices
+
+   *  Devices may receive such a configuration and thus will need to
       maintain it locally.
 
    (Figure 2 depicts an example of an optimized structure:
@@ -313,7 +314,8 @@ Table of Contents
 3.2.  Manageability: Impossibility to Use Aliases or Defined Sets
 
    The same approach as the one discussed for IP prefixes can be
-   generalized by introduing the concept of "aliases" or "defined sets".
+   generalized by introducing the concept of "aliases" or "defined
+   sets".
 
    The defined sets are reusable definitions across several ACLs.  Each
    category is modelled in YANG as a list of parameters related to the
@@ -1421,7 +1423,7 @@ Appendix A.  Acknowledgements
    Many thanks to Jon Shallow and Miguel Cros for the review and
    comments to the document, incuding priror to publishing the document.
 
-   Thanks for Qin Wu for the comments and suggestions.
+   Thanks for Qin Wu and Qiufang Ma for the comments and suggestions.
 
    This work is partially supported by the European Commission under
    Horizon 2020 Secured autonomic traffic management for a Tera of SDN

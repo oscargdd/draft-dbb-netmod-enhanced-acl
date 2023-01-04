@@ -263,7 +263,7 @@ Table of Contents
    *  Devices may receive such a configuration and thus will need to
       maintain it locally.
 
-   (Figure 2 depicts an example of an optimized structure:
+   Figure 2 depicts an example of an optimized structure:
 
    {
      "ietf-access-control-list:acls": {
@@ -743,8 +743,8 @@ Table of Contents
    In order to support rate-limiting (see Section 3.6), a new action
    called "rate-limit" is defined.
 
-   (#example_5) shows an ACL example to rate-limit incoming SYNs during
-   a SYN flood attack.
+   Figure 9 shows an ACL example to rate-limit incoming SYNs during a
+   SYN flood attack.
 
      {
         "ietf-access-control-list:acls": {

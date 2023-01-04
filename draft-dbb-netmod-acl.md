@@ -193,12 +193,12 @@ and destination prefixes are involved.
 {: #example title="Example Illustrating Sub-optimal Use of the ACL Model with a Prefix List"}
 
 Such a configuration is suboptimal for both:
+
 - Network controllers that
    need to manipulate large files.  All or a subset for this
    configuration will need to be passed to the underlying network
    devices
-
-- Devices may receive such a confirguration and thus will need to maintain it locally.
+- Devices may receive such a configuration and thus will need to maintain it locally.
 
 ({{example_1}} depicts an example of an optimized structure:
 
@@ -251,7 +251,7 @@ Such a configuration is suboptimal for both:
 
 ## Manageability: Impossibility to Use Aliases or Defined Sets
 
-The same approach as the one discussed for IP prefixes can be generalized by introduing the concept of "aliases" or "defined sets".
+The same approach as the one discussed for IP prefixes can be generalized by introducing the concept of "aliases" or "defined sets".
 
 The defined sets are reusable definitions across several ACLs. Each category is modelled in YANG as a list of parameters related to the class it represents. The following sets can be considered:
 
@@ -1239,7 +1239,7 @@ This document requests IANA to register the following YANG module in
 
 Many thanks to Jon Shallow and Miguel Cros for the review and comments to the document, incuding priror to publishing the document.
 
-Thanks for Qin Wu for the comments and suggestions.
+Thanks for Qin Wu and Qiufang Ma for the comments and suggestions.
 
 This work is partially supported by the European Commission under   Horizon 2020 Secured autonomic traffic management for a Tera of SDN
  flows (Teraflow) project (grant agreement number 101015857).

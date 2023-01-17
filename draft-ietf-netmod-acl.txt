@@ -5,13 +5,13 @@
 netmod                                                     O. G. D. Dios
 Internet-Draft                                                S. Barguil
 Intended status: Standards Track                              Telefonica
-Expires: 8 July 2023                                        M. Boucadair
+Expires: 21 July 2023                                       M. Boucadair
                                                                   Orange
-                                                          4 January 2023
+                                                         17 January 2023
 
 
         Extensions to the Access Control Lists (ACLs) YANG Model
-                      draft-dbb-netmod-acl-latest
+                      draft-ietf-netmod-acl-latest
 
 Abstract
 
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 July 2023.
+   This Internet-Draft will expire on 21 July 2023.
 
 Copyright Notice
 

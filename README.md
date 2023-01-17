@@ -10,21 +10,7 @@ This is the working area for the individual Internet-Draft, "Extensions to the A
 
 ## Contributing
 
-See the
-[guidelines for contributions](https://github.com/oscargdd/draft-dbb-netmod-enhanced-acl/blob/main/CONTRIBUTING.md).
-
-Contributions can be made by creating pull requests.
-The GitHub interface supports creating pull requests using the Edit (✏) button.
+* The latest version of thsi specification is available [here](https://github.com/boucadair/enhanced-acl-netmod)
 
 
-## Command Line Usage
-
-Formatted text and HTML versions of the draft can be built using `make`.
-
-```sh
-$ make
-```
-
-Command line usage requires that you have the necessary software installed.  See
-[the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
 

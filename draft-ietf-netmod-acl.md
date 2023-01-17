@@ -1,7 +1,7 @@
 ---
 title: Extensions to the Access Control Lists (ACLs) YANG Model
 abbrev: Enhanced ACLs
-docname: draft-dbb-netmod-acl-latest
+docname: draft-ietf-netmod-acl-latest
 
 
 stand_alone: true
